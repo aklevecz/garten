@@ -1,13 +1,30 @@
 <script lang="ts">
   import GoogleMaps from "$components/GoogleMaps.svelte";
+  import mapStore from "$stores/map";
+  export let data;
 
-  let map: any = null;
+  let coords = { lat: 0, lng: 0 };
+  function initHunt() {
+    const { markers } = data;
+    mapStore.setMarkers(markers);
+    function success(e: any) {
+      console.log(e);
+      coords.lat = e.coords.latitude;
+      coords.lng = e.coords.longitude;
+      coords = coords;
+    }
+    function error(err: any) {
+      console.error(`ERROR(${err.code}): ${err.message}`);
+    }
+    navigator.geolocation.watchPosition(success, error, { maximumAge: 0, enableHighAccuracy: true });
+  }
 </script>
 
+<div>{JSON.stringify(coords)}</div>
 <GoogleMaps
-  {map}
   globally
-  on:load={() => {
-    console.log("MAP SAYS IM LOADED");
+  on:load={(e) => {
+    initHunt();
+    console.log("+page.svelte:Map Loaded");
   }}
 />

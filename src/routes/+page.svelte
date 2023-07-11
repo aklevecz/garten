@@ -18,6 +18,13 @@
     }
     navigator.geolocation.watchPosition(success, error, { maximumAge: 0, enableHighAccuracy: true });
   }
+
+  $: {
+    if (coords.lat && coords.lng && $mapStore.map) {
+      $mapStore.map.setCenter(coords);
+      mapStore.createMarker({ name: "test", hunt: "fwb-fest", position: coords });
+    }
+  }
 </script>
 
 <div>{JSON.stringify(coords)}</div>

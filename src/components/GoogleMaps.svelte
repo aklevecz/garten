@@ -46,9 +46,16 @@
 </script>
 
 <!-- This is tailwind css class change with whatever fits to your case. -->
-<div class="w-full h-full" bind:this={container} />
+<div class="map_container" bind:this={container} />
 <svelte:head>
   {#if src}
     <script defer async {src}></script>
   {/if}
 </svelte:head>
+
+<style>
+  .map_container {
+    width: 100%;
+    height: 100%;
+  }
+</style>

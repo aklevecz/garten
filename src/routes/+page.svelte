@@ -27,7 +27,7 @@
   }
 </script>
 
-<div class="absolute left-0 top-10 z-10 text-red-500">{JSON.stringify(coords)}</div>
+<div class="lat-lng">{JSON.stringify(coords)}</div>
 <GoogleMaps
   globally
   on:load={(e) => {
@@ -35,3 +35,13 @@
     console.log("+page.svelte:Map Loaded");
   }}
 />
+
+<style>
+  .lat-lng {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: red;
+    z-index: 99;
+  }
+</style>

@@ -27,7 +27,7 @@
   }
 </script>
 
-<div>{JSON.stringify(coords)}</div>
+<div class="absolute left-0 top-10 z-10 text-red-500">{JSON.stringify(coords)}</div>
 <GoogleMaps
   globally
   on:load={(e) => {

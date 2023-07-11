@@ -4,7 +4,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   const dispatch = createEventDispatcher();
 
-  //import mapStyles from './map-styles'; // optional
+  import mapStyles from "./map-styles"; // optional
 
   export let globally = false;
   let map;
@@ -23,7 +23,7 @@
       map = new google.maps.Map(container, {
         zoom,
         center,
-        // styles: mapStyles
+        styles: mapStyles,
       });
       await mapStore.setMap(map);
       dispatch("load", { map });
@@ -46,7 +46,7 @@
 </script>
 
 <!-- This is tailwind css class change with whatever fits to your case. -->
-<div class="map_container" bind:this={container} />
+<div class="map-container" bind:this={container} />
 <svelte:head>
   {#if src}
     <script defer async {src}></script>
@@ -54,7 +54,7 @@
 </svelte:head>
 
 <style>
-  .map_container {
+  .map-container {
     width: 100%;
     height: 100%;
   }

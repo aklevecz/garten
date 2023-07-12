@@ -1,10 +1,10 @@
 import type { HuntMarker } from "./types";
 
-const createMarker = (map: google.maps.Map, marker: HuntMarker) => {
+const createMarker = (map: google.maps.Map, position: google.maps.LatLngLiteral, title: string) => {
   const newMarker = new google.maps.Marker({
-    position: marker.position,
+    position,
     map,
-    title: marker.name,
+    title,
   });
   return newMarker;
 };

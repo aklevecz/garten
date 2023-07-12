@@ -8,3 +8,11 @@ export const mapCenters = {
     lng: -116.7468343908923,
   },
 };
+
+export const cookieKeys = {
+  hunter: "hunter",
+};
+
+export const requestErrors = {
+  signInFailed: "Hunter sign in failed",
+};

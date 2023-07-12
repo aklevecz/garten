@@ -4,7 +4,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   const dispatch = createEventDispatcher();
 
-  import mapStyles from "./map-styles"; // optional
+  import mapStyles from "$lib/map-styles"; // optional
 
   export let globally = false;
   let map;
@@ -13,7 +13,7 @@
   let src = "";
 
   let container: HTMLDivElement;
-  let zoom = 20;
+  let zoom = 13;
   let center = $mapStore.center;
 
   const genGmapApiLink = (key: string) => `https://maps.googleapis.com/maps/api/js?key=${key}&callback=mapLoaded`;
@@ -24,6 +24,7 @@
         zoom,
         center,
         styles: mapStyles,
+        disableDefaultUI: true,
       });
       await mapStore.setMap(map);
       dispatch("load", { map });

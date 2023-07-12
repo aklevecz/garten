@@ -1,14 +1,18 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
+  import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
+  import Modal from "$components/Modal.svelte";
+  import Login from "$components/modals/Login.svelte";
   import mapStore from "$stores/map";
-  export let data;
+  import type { PageData } from "./$types";
+  export let data: PageData;
 
   let coords = { lat: 0, lng: 0 };
   function initHunt() {
     const { markers } = data;
     mapStore.setMarkers(markers);
     function success(e: any) {
-      console.log(e);
       coords.lat = e.coords.latitude;
       coords.lng = e.coords.longitude;
       coords = coords;
@@ -22,12 +26,24 @@
   $: {
     if (coords.lat && coords.lng && $mapStore.map) {
       $mapStore.map.setCenter(coords);
-      mapStore.createMarker({ name: "test", hunt: "fwb-fest", position: coords });
+      mapStore.createUpdateUserMarker(coords);
     }
   }
+
+  $: {
+    console.log("+page.svelte, $page.data:", $page.data);
+  }
+
+  let showModal = false;
 </script>
 
-<div class="lat-lng">{JSON.stringify(coords)}</div>
+<button
+  on:click={() => {
+    showModal = true;
+  }}
+  class="lat-lng">{JSON.stringify(coords)} - {$page.data.hunter || "not logged in"}</button
+>
+<Login hunter={data.hunter} bind:showModal />
 <GoogleMaps
   globally
   on:load={(e) => {

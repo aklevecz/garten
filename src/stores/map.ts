@@ -3,38 +3,15 @@ import { mapCenters } from "$lib/constants";
 import type { HuntMarker } from "$lib/types";
 import mapUtils from "$lib/mapUtils";
 
-function circlePath(cx: number, cy: number, r: number) {
-  return (
-    "M " +
-    cx +
-    " " +
-    cy +
-    " m -" +
-    r +
-    ", 0 a " +
-    r +
-    "," +
-    r +
-    " 0 1,1 " +
-    r * 2 +
-    ",0 a " +
-    r +
-    "," +
-    r +
-    " 0 1,1 -" +
-    r * 2 +
-    ",0"
-  );
-}
-
 type MapStore = {
   map: google.maps.Map | null;
   center: google.maps.LatLngLiteral;
   markers: google.maps.Marker[];
+  userMarker: google.maps.Marker | null;
 };
 
 function createStore() {
-  const mapStore = writable<MapStore>({ map: null, center: mapCenters.laColombe, markers: [] });
+  const mapStore = writable<MapStore>({ map: null, center: mapCenters.laColombe, markers: [], userMarker: null });
   const { set, subscribe, update } = mapStore;
 
   return {
@@ -59,8 +36,15 @@ function createStore() {
       });
     },
     createMarker: (marker: HuntMarker) => {
-      const newMarker = mapUtils.createMarker(get(mapStore).map!, marker);
+      const newMarker = mapUtils.createMarker(get(mapStore).map!, marker.position, marker.name);
       update((m) => ({ ...m, markers: [...m.markers, newMarker] }));
+    },
+    createUpdateUserMarker: (position: google.maps.LatLngLiteral) => {
+      const mapState = get(mapStore);
+      const userMarker = mapState.userMarker
+        ? mapState.userMarker
+        : mapUtils.createMarker(mapState.map!, position, "user");
+      update((m) => ({ ...m, userMarker }));
     },
   };
 }

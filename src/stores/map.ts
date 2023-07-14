@@ -14,6 +14,15 @@ function createStore() {
   const mapStore = writable<MapStore>({ map: null, center: mapCenters.laColombe, markers: [], userMarker: null });
   const { set, subscribe, update } = mapStore;
 
+  // maputils, but has store effects
+  const createUpdateUserMarker = (position: google.maps.LatLngLiteral) => {
+    const mapState = get(mapStore);
+    const userMarker = mapState.userMarker
+      ? mapState.userMarker
+      : mapUtils.createMarker(mapState.map!, position, "user");
+    update((m) => ({ ...m, userMarker }));
+  };
+
   return {
     subscribe,
     setMap: (map: google.maps.Map) => {
@@ -39,12 +48,19 @@ function createStore() {
       const newMarker = mapUtils.createMarker(get(mapStore).map!, marker.position, marker.name);
       update((m) => ({ ...m, markers: [...m.markers, newMarker] }));
     },
-    createUpdateUserMarker: (position: google.maps.LatLngLiteral) => {
-      const mapState = get(mapStore);
-      const userMarker = mapState.userMarker
-        ? mapState.userMarker
-        : mapUtils.createMarker(mapState.map!, position, "user");
-      update((m) => ({ ...m, userMarker }));
+    createUpdateUserMarker,
+    trackUser: () => {
+      function success(e: any) {
+        const lat = e.coords.latitude;
+        const lng = e.coords.longitude;
+        console.log(e);
+        createUpdateUserMarker({ lat, lng });
+      }
+      function error(err: any) {
+        console.error(`ERROR(${err.code}): ${err.message}`);
+      }
+      let watchFrame = navigator.geolocation.watchPosition(success, error, { maximumAge: 0, enableHighAccuracy: true });
+      return () => navigator.geolocation.clearWatch(watchFrame);
     },
   };
 }

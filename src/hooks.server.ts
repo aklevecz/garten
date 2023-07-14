@@ -16,6 +16,5 @@ export const handle = (async ({ event, resolve }) => {
     console.log(e);
     event.locals.hunter = "";
   }
-  console.log(event.locals);
   return resolve(event);
 }) satisfies Handle;

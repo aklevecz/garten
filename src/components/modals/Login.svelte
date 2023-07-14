@@ -12,7 +12,7 @@
 
 <Modal bind:showModal>
   <div>
-    <form method="POST" action="?/login" use:enhance>
+    <form method="POST" action="/?/login" use:enhance>
       <div class="form-control">
         <label for="hunter" class="label">
           <span class="label-text">Your address</span>
@@ -20,7 +20,7 @@
         </label>
       </div>
       <button>login</button>
-      <button formaction="?/logout">logout</button>
+      <button formaction="/?/logout">logout</button>
     </form>
   </div>
 </Modal>

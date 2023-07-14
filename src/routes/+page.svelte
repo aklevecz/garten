@@ -12,24 +12,7 @@
   function initHunt() {
     const { markers } = data;
     mapStore.setMarkers(markers);
-    function success(e: any) {
-      coords.lat = e.coords.latitude;
-      coords.lng = e.coords.longitude;
-      coords = coords;
-    }
-    function error(err: any) {
-      console.error(`ERROR(${err.code}): ${err.message}`);
-    }
-    navigator.geolocation.watchPosition(success, error, { maximumAge: 0, enableHighAccuracy: true });
   }
-
-  $: {
-    if (coords.lat && coords.lng && $mapStore.map) {
-      $mapStore.map.setCenter(coords);
-      mapStore.createUpdateUserMarker(coords);
-    }
-  }
-
   $: {
     console.log("+page.svelte, $page.data:", $page.data);
   }
@@ -41,7 +24,7 @@
   on:click={() => {
     showModal = true;
   }}
-  class="lat-lng">{JSON.stringify(coords)} - {$page.data.hunter || "not logged in"}</button
+  class="lat-lng">{JSON.stringify($mapStore.userMarker?.getPosition())} - {$page.data.hunter || "not logged in"}</button
 >
 <Login hunter={data.hunter} bind:showModal />
 <GoogleMaps
@@ -51,6 +34,7 @@
     console.log("+page.svelte:Map Loaded");
   }}
 />
+<button class="user-position" on:click={() => mapStore.trackUser()}>USER POSITION</button>
 
 <style>
   .lat-lng {
@@ -59,5 +43,10 @@
     top: 10px;
     color: red;
     z-index: 99;
+  }
+  .user-position {
+    position: absolute;
+    bottom: 10px;
+    z-index: 9;
   }
 </style>

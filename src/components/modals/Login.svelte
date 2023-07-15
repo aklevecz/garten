@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { page } from "$app/stores";
   import Modal from "$components/Modal.svelte";
   import In from "$components/svg/In.svelte";
 
@@ -7,7 +8,14 @@
   export let showModal = false;
   //#775bff
   $: {
-    console.log("Login.svelte, hunter:", hunter === undefined, hunter);
+    hunter = $page.data.hunter;
+    console.log("Login.svelte, hunter:", hunter);
+    if (hunter) {
+      showModal = false;
+    }
+    showModal = showModal;
+    hunter = hunter;
+    console.log(hunter, showModal);
   }
 </script>
 

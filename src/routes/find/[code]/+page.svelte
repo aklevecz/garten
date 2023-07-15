@@ -12,10 +12,13 @@
   $: cracked = $page.data.marker.finder && $page.data.marker.found;
   $: isAuthed = Boolean(data.hunter);
   $: markerName = data.marker.name;
-  $: markerFound = cracked ? "TOO LATE :(" : "";
   $: finder = $page.data.hunter || "CRACKABLE";
 
   $: buttonText = cracked ? "CRACKED" : "CRACK";
+
+  $: wasCracker = data.marker.finder === $page.data.hunter;
+
+  $: markerFound = wasCracker ? "YOU GOT IT :)" : cracked ? "TOO LATE :(" : "CLAIMABLE";
 </script>
 
 <div class="list-container">
@@ -61,6 +64,7 @@
   .bottom-black-yellow {
     color: yellow;
     background-color: red;
+    border: none;
     padding: 10px 0px;
   }
   button:disabled {

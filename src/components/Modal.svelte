@@ -2,8 +2,12 @@
   export let showModal: boolean; // boolean
 
   let dialog: HTMLDialogElement; // HTMLDialogElement
-
   $: if (dialog && showModal) dialog.showModal();
+  $: {
+    if (!showModal && dialog) {
+      dialog.close();
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -68,5 +72,6 @@
   button {
     display: block;
     border: none;
+    color: black;
   }
 </style>

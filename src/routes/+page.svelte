@@ -23,7 +23,7 @@
   }}
   class="lat-lng">{JSON.stringify($mapStore.userMarker?.getPosition())} - {$page.data.hunter || "not logged in"}</button
 >
-<Login hunter={data.hunter} bind:showModal />
+<Login bind:showModal />
 <GoogleMaps
   globally
   on:load={(e) => {

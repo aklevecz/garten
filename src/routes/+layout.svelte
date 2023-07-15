@@ -16,10 +16,17 @@
     height: 100%;
     font-family: Roboto;
   }
-  :global(button.big) {
+  :global(.h2) {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  :global(button) {
     background: black;
     color: white;
     font-weight: bold;
+    padding: 2px 10px;
+  }
+  :global(button.big) {
     font-size: 2rem;
     padding: 4px 20px;
   }

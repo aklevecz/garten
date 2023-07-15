@@ -18,16 +18,15 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div on:click|stopPropagation>
     <slot name="header" />
-    <hr />
     <slot />
-    <hr />
     <!-- svelte-ignore a11y-autofocus -->
   </div>
 </dialog>
 
 <style>
   dialog {
-    max-width: 32em;
+    max-width: 400px;
+    width: 80%;
     border-radius: 0.2em;
     border: none;
     padding: 0;
@@ -39,7 +38,7 @@
     background: none;
   }
   dialog::backdrop {
-    background: rgba(0, 0, 0, 0.3);
+    background: #84ff005d;
   }
   dialog > div {
     padding: 1em;
@@ -68,5 +67,6 @@
   }
   button {
     display: block;
+    border: none;
   }
 </style>

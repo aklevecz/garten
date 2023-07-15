@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
-  import Modal from "$components/Modal.svelte";
   import Login from "$components/modals/Login.svelte";
   import mapStore from "$stores/map";
   import type { PageData } from "./$types";
   export let data: PageData;
 
-  let coords = { lat: 0, lng: 0 };
   function initHunt() {
     const { markers } = data;
     mapStore.setMarkers(markers);

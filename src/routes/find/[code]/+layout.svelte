@@ -1,16 +1,29 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
+  import Login from "$components/modals/Login.svelte";
+  import In from "$components/svg/In.svelte";
+  import Out from "$components/svg/Out.svelte";
 
-  $: hunter = $page.data.hunter;
+  $: hunter = $page.data.hunter || "";
+
+  let showModal = false;
 </script>
 
 <div class="layout-container">
   <div class="hunter">
-    {hunter}
-    <form method="POST" use:enhance><button formaction="/?/logout">out</button></form>
+    {hunter?.slice(0, 20) + "..."}
+    <form method="POST" use:enhance>
+      {#if hunter}<button formaction="/?/logout"><Out /></button>{/if}
+    </form>
+    {#if !hunter}<button
+        on:click={() => {
+          showModal = true;
+        }}><In /></button
+      >{/if}
   </div>
   <slot />
+  <Login bind:showModal />
 </div>
 
 <style>
@@ -18,19 +31,23 @@
     background: none;
     border: none;
     font-weight: bold;
+    width: 50px;
+    height: 50px;
   }
+
   .layout-container {
     height: 100%;
     display: flex;
     flex-direction: column;
   }
   .hunter {
-    font-size: 10px;
+    font-size: 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    /* gap: 50px; */
     width: 100%;
     text-align: center;
-    padding: 2px;
+    padding: 2px 10px;
   }
 </style>

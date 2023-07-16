@@ -1,7 +1,8 @@
-import { writable, get } from "svelte/store";
 import { mapCenters } from "$lib/constants";
-import type { HuntMarker } from "$lib/types";
 import mapUtils from "$lib/mapUtils";
+import type { HuntMarker } from "$lib/types";
+import { get, writable } from "svelte/store";
+import { eggModal } from "./modal";
 import userStore from "./user";
 
 type MapStore = {
@@ -32,7 +33,7 @@ function createStore() {
     setMarkers: (markers: HuntMarker[]) => {
       const mapState = get(mapStore);
       const newMarkers = markers.map((marker) => {
-        return new google.maps.Marker({
+        const mark = new google.maps.Marker({
           position: marker.position,
           map: mapState.map,
           title: marker.name,
@@ -48,6 +49,13 @@ function createStore() {
             scaledSize: new google.maps.Size(45, 45),
           },
         });
+        mark.addListener("click", () => {
+          eggModal.set({
+            showModal: true,
+            data: { title: marker.name, found: marker.found || false, finder: marker.finder || "" },
+          });
+        });
+        return mark;
       });
       const renderer = {
         render: ({ count, position }: any) =>
@@ -71,6 +79,7 @@ function createStore() {
         ...mapState,
         markers: [...newMarkers],
       });
+      return newMarkers;
     },
     createMarker: (marker: HuntMarker) => {
       const newMarker = mapUtils.createMarker(get(mapStore).map!, marker.position, marker.name);

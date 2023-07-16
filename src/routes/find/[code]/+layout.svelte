@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
   import Login from "$components/modals/Login.svelte";
+  import Egg from "$components/svg/Egg.svelte";
   import In from "$components/svg/In.svelte";
   import Out from "$components/svg/Out.svelte";
   import gameStore from "$stores/game";
@@ -13,19 +14,15 @@
   onMount(() => {
     gameStore.init($page.data.eggsCollected);
   });
-
-  $: {
-    console.log($page.data);
-    console.log(hunter);
-  }
 </script>
 
 <div class="layout-container">
   <div class="hunter">
     <div class:hide={$page.data.eggsCollected === undefined || !hunter}>
       {hunter?.slice(0, 20)}
-      {hunter.length > 20 ? "..." : ""} COLLECTED: {$page.data.eggsCollected?.length}
+      {hunter.length > 20 ? "..." : ""}
     </div>
+    <div class="collected-container"><Egg /> {$page.data.eggsCollected?.length}</div>
     <form method="POST" use:enhance>
       {#if hunter}<button formaction="/?/logout"><Out /></button>{/if}
     </form>
@@ -63,6 +60,13 @@
     width: 100%;
     text-align: center;
     padding: 2px 10px;
+  }
+  .collected-container {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 30px;
   }
   .hide {
     display: none;

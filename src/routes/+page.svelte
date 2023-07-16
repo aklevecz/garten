@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { invalidate, invalidateAll } from "$app/navigation";
+  import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
+  import Egg from "$components/modals/Egg.svelte";
+  import EggIcon from "$components/svg/Egg.svelte";
   import Login from "$components/modals/Login.svelte";
   import In from "$components/svg/In.svelte";
   import Locate from "$components/svg/Locate.svelte";
@@ -15,7 +17,7 @@
 
   function initHunt() {
     const { markers } = data;
-    mapStore.setMarkers(markers);
+    const googleMarkers = mapStore.setMarkers(markers);
   }
 
   $: {
@@ -23,9 +25,15 @@
       initHunt();
     }
   }
+
+  function onBlur() {
+    invalidateAll();
+  }
 </script>
 
-<svelte:window on:blur={invalidateAll} on:focus={invalidateAll} />
+<svelte:window on:blur={onBlur} on:focus={onBlur} />
+<div class="collected-container"><EggIcon /> {$page.data.eggsCollected?.length}</div>
+
 <div class="user-bar">
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST">
@@ -39,6 +47,7 @@
     >{/if}
 </div>
 <Login bind:showModal />
+<Egg />
 <GoogleMaps
   globally
   on:load={(e) => {
@@ -49,6 +58,19 @@
 <button class="user-position" on:click={() => mapStore.trackUser()}><Locate /></button>
 
 <style>
+  .collected-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 30px;
+    z-index: 9;
+    height: 50px;
+    width: 100px;
+    right: 0px;
+    background-color: white;
+  }
   .user-bar {
     display: flex;
     position: absolute;

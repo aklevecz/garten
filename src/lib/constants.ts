@@ -13,6 +13,10 @@ export const cookieKeys = {
   hunter: "hunter",
 };
 
+export const modalKeys = {
+  eggModal: "egg-modal",
+};
+
 export const requestErrors = {
   signInFailed: "Hunter sign in failed",
 };

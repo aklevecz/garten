@@ -1,4 +1,9 @@
 <script lang="ts">
+  import { modalKeys } from "$lib/constants";
+  import { eggModal } from "$stores/modal";
+  import { getContext } from "svelte";
+  import type { Writable } from "svelte/store";
+
   export let showModal: boolean; // boolean
 
   let dialog: HTMLDialogElement; // HTMLDialogElement
@@ -6,6 +11,8 @@
   $: {
     if (!showModal && dialog) {
       dialog.close();
+      showModal = false;
+      eggModal.set({ showModal: false, data: { title: "", found: false, finder: "" } });
     }
   }
 </script>
@@ -42,6 +49,7 @@
     top: -2px;
     background: none;
     font-size: 30px;
+    outline: none;
   }
   dialog::backdrop {
     background: #84ff005d;

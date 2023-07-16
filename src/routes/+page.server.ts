@@ -10,7 +10,11 @@ export const load = (async ({ cookies, locals }) => {
   const hunter = locals.hunter;
   const markers = db.getMarkers("fwb-fest");
   console.log("+page.server.ts load :", locals.hunter);
-  return { markers, hunter };
+  return {
+    markers,
+    hunter,
+    eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
+  };
 }) satisfies PageServerLoad;
 
 export const actions = {

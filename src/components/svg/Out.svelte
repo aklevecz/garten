@@ -6,10 +6,3 @@
     stroke-miterlimit="10"
   /><polyline points="9.61 10.4 10.33 4.72 14.01 6.99" fill="none" stroke="#ef4423" stroke-miterlimit="10" /></svg
 >
-
-<style>
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-</style>

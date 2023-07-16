@@ -15,7 +15,6 @@
     }
     showModal = showModal;
     hunter = hunter;
-    console.log(hunter, showModal);
   }
 </script>
 
@@ -27,7 +26,7 @@
         <label for="hunter" class="label">
           <div class="label-text">address</div>
         </label>
-        <input name="hunter" class="input" value={hunter} />
+        <input name="hunter" class="input" value={hunter || "testing"} />
       </div>
       <button><In /></button>
     </form>
@@ -43,12 +42,15 @@
   label {
     /* font-family: monospace;s */
     font-size: 1rem;
+    text-transform: uppercase;
+    padding-left: 7px;
   }
   input {
-    width: 80%;
-    padding: 5px 2px;
+    width: 90%;
+    padding: 3px 8px;
     background: black;
     color: white;
+    font-size: 1.2rem;
   }
   button {
     border: none;

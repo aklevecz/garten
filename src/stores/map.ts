@@ -35,10 +35,31 @@ function createStore() {
           position: marker.position,
           map: mapState.map,
           title: marker.name,
-          icon: mapUtils.svgMarker(),
+          // icon: mapUtils.svgMarker(),
+          icon: {
+            // url: `data:image/svg+xml;base64,${svg}`,
+            url: "/egg-smoll-map-icon.svg",
+            scaledSize: new google.maps.Size(45, 45),
+          },
         });
       });
-
+      const renderer = {
+        render: ({ count, position }: any) =>
+          new google.maps.Marker({
+            // label: { text: String(count), color: "red", fontSize: "20px" },
+            position,
+            icon: {
+              // url: `data:image/svg+xml;base64,${svg}`,
+              url: "/egg-bunch.svg",
+              scaledSize: new google.maps.Size(60, 60),
+            },
+            // adjust zIndex to be above other markers
+            zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+          }),
+      };
+      setTimeout(() => {
+        const markerCluster = new markerClusterer.MarkerClusterer({ map: mapState.map, markers: newMarkers, renderer });
+      }, 2000);
       set({
         ...mapState,
         markers: [...newMarkers],
@@ -53,7 +74,6 @@ function createStore() {
       function success(e: any) {
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
-        console.log(e);
         createUpdateUserMarker({ lat, lng });
       }
       function error(err: any) {

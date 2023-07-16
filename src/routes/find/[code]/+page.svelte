@@ -28,7 +28,10 @@
   </div>
   <div>
     <div class="label">status</div>
-    <div class="marker-found">{markerFound}</div>
+    <div class:was-cracked={wasCracker} class="marker-found">{markerFound}</div>
+  </div>
+  <div>
+    <a href="/">back to da map</a>
   </div>
 </div>
 {#if cracked}
@@ -73,5 +76,8 @@
   }
   .label {
     font-size: 8px !important;
+  }
+  .was-cracked {
+    color: var(--green);
   }
 </style>

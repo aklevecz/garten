@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
   import Login from "$components/modals/Login.svelte";
+  import Locate from "$components/svg/Locate.svelte";
   import mapStore from "$stores/map";
   import type { PageData } from "./$types";
   export let data: PageData;
@@ -31,7 +32,7 @@
     console.log("+page.svelte:Map Loaded");
   }}
 />
-<button class="user-position" on:click={() => mapStore.trackUser()}>USER POSITION</button>
+<button class="user-position" on:click={() => mapStore.trackUser()}><Locate /></button>
 
 <style>
   .lat-lng {
@@ -43,7 +44,13 @@
   }
   .user-position {
     position: absolute;
+    right: 10px;
     bottom: 10px;
     z-index: 9;
+    width: 80px;
+    height: 80px;
+    background: rgb(255, 0, 162);
+    border-radius: 50%;
+    border: 10px solid white;
   }
 </style>

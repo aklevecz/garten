@@ -4,15 +4,28 @@
   import Login from "$components/modals/Login.svelte";
   import In from "$components/svg/In.svelte";
   import Out from "$components/svg/Out.svelte";
+  import gameStore from "$stores/game";
+  import { onMount } from "svelte";
 
   $: hunter = $page.data.hunter || "";
-
   let showModal = false;
+
+  onMount(() => {
+    gameStore.init($page.data.eggsCollected);
+  });
+
+  $: {
+    console.log($page.data);
+    console.log(hunter);
+  }
 </script>
 
 <div class="layout-container">
   <div class="hunter">
-    {hunter?.slice(0, 20) + "..."}
+    <div class:hide={$page.data.eggsCollected === undefined || !hunter}>
+      {hunter?.slice(0, 20)}
+      {hunter.length > 20 ? "..." : ""} COLLECTED: {$page.data.eggsCollected?.length}
+    </div>
     <form method="POST" use:enhance>
       {#if hunter}<button formaction="/?/logout"><Out /></button>{/if}
     </form>
@@ -21,9 +34,9 @@
           showModal = true;
         }}><In /></button
       >{/if}
+    <Login bind:showModal />
   </div>
   <slot />
-  <Login bind:showModal />
 </div>
 
 <style>
@@ -37,6 +50,7 @@
 
   .layout-container {
     height: 100%;
+    min-height: 50px;
     display: flex;
     flex-direction: column;
   }
@@ -49,5 +63,8 @@
     width: 100%;
     text-align: center;
     padding: 2px 10px;
+  }
+  .hide {
+    display: none;
   }
 </style>

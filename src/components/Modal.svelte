@@ -30,7 +30,7 @@
 <style>
   dialog {
     max-width: 400px;
-    width: 80%;
+    width: 90%;
     border-radius: 0.2em;
     border: none;
     padding: 0;
@@ -38,8 +38,10 @@
   }
   .modal-close {
     position: absolute;
-    right: 0;
+    right: 1px;
+    top: -2px;
     background: none;
+    font-size: 30px;
   }
   dialog::backdrop {
     background: #84ff005d;

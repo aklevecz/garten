@@ -28,6 +28,8 @@ const hunts: { [hunt in Hunts]: any } = {
 // @todo markers hunt mapping
 // @todo marker groups?
 // MARKER#marker_name/id HUNT#<hunt_name>
+// BY ID
+// BY HUNTER
 let markers: HuntMarker[] = [
   ...randomLocs,
   { name: "fwb-fest-1", hunt: "fwb-fest", position: { ...mapCenters.laColombe }, code: "shrimp" },
@@ -56,4 +58,9 @@ const claimMarker = (claimedMarker: HuntMarker, finder: string) => {
   markers = [...filteredMarkers, { ...claimedMarker, found: true, finder }];
 };
 
-export default { getMarkers, checkMarker, getActiveHunt, getMarkerByCode, claimMarker };
+const getHuntersCollected = (hunt: Hunts, hunter: string) => {
+  const huntedMarkers = markers.filter((marker) => marker.hunt === hunt && marker.finder === hunter);
+  return huntedMarkers;
+};
+
+export default { getMarkers, checkMarker, getActiveHunt, getMarkerByCode, claimMarker, getHuntersCollected };

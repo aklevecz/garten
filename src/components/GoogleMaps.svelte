@@ -51,6 +51,7 @@
 <svelte:head>
   {#if src}
     <script defer async {src}></script>
+    <script defer async src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
   {/if}
 </svelte:head>
 

@@ -6,6 +6,9 @@
 <slot />
 
 <style>
+  :root {
+    --green: #84ff00;
+  }
   :global(*) {
     box-sizing: border-box;
   }
@@ -15,6 +18,10 @@
     width: 100%;
     height: 100%;
     font-family: Roboto;
+  }
+  :global(svg) {
+    width: 100%;
+    height: 100%;
   }
   :global(.h2) {
     font-size: 2.5rem;

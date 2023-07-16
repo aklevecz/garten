@@ -2,6 +2,7 @@ import { writable, get } from "svelte/store";
 import { mapCenters } from "$lib/constants";
 import type { HuntMarker } from "$lib/types";
 import mapUtils from "$lib/mapUtils";
+import userStore from "./user";
 
 type MapStore = {
   map: google.maps.Map | null;
@@ -38,7 +39,12 @@ function createStore() {
           // icon: mapUtils.svgMarker(),
           icon: {
             // url: `data:image/svg+xml;base64,${svg}`,
-            url: "/egg-smoll-map-icon.svg",
+            url:
+              marker.found && marker.finder === get(userStore).hunter
+                ? "/egg-broken-smoll-map-icon-yours.svg"
+                : marker.found
+                ? "/egg-broken-smoll-map-icon-others.svg"
+                : "/egg-smoll-map-icon.svg",
             scaledSize: new google.maps.Size(45, 45),
           },
         });
@@ -58,6 +64,7 @@ function createStore() {
           }),
       };
       setTimeout(() => {
+        // @ts-ignore
         const markerCluster = new markerClusterer.MarkerClusterer({ map: mapState.map, markers: newMarkers, renderer });
       }, 2000);
       set({

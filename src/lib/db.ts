@@ -25,13 +25,13 @@ const hunts: { [hunt in Hunts]: any } = {
     center: mapCenters.fwbFest,
   },
 };
+
 // @todo markers hunt mapping
 // @todo marker groups?
 // MARKER#marker_name/id HUNT#<hunt_name>
 // BY ID
 // BY HUNTER
 let markers: HuntMarker[] = [
-  ...randomLocs,
   { name: "fwb-fest-1", hunt: "fwb-fest", position: { ...mapCenters.laColombe }, code: "shrimp" },
   {
     name: "fwb-fest-2",

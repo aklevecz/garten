@@ -9,7 +9,7 @@
   //#775bff
   $: {
     hunter = $page.data.hunter;
-    console.log("Login.svelte, hunter:", hunter);
+    // console.log("Login.svelte, hunter:", hunter);
     if (hunter) {
       showModal = false;
     }
@@ -43,14 +43,22 @@
     /* font-family: monospace;s */
     font-size: 1rem;
     text-transform: uppercase;
-    padding-left: 7px;
+    padding-left: 2.3px;
+  }
+  .label-text {
+    font-weight: bold;
+    padding: 0px;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
   }
   input {
     width: 90%;
-    padding: 3px 8px;
+    padding: 6px 12px;
     background: black;
     color: white;
     font-size: 1.2rem;
+    border-radius: 4px;
+    border: none;
   }
   button {
     border: none;

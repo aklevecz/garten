@@ -28,7 +28,7 @@ export const actions = {
     }
   },
   logout: async ({ cookies, locals }) => {
-    locals.hunter = "kerman";
+    locals.hunter = "";
     cookies.delete(cookieKeys.hunter);
     console.log("+page.server.ts actions  logout:", locals);
   },

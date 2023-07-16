@@ -30,9 +30,6 @@
     <div class="label">status</div>
     <div class:was-cracked={wasCracker} class="marker-found">{markerFound}</div>
   </div>
-  <div>
-    <a href="/">back to da map</a>
-  </div>
 </div>
 {#if cracked}
   <EggCracked />
@@ -69,6 +66,9 @@
     background-color: red;
     border: none;
     padding: 10px 0px;
+  }
+  button {
+    border-radius: 0px;
   }
   button:disabled {
     background-color: grey;

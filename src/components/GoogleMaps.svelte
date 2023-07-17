@@ -6,6 +6,9 @@
 
   import mapStyles from "$lib/map-styles"; // optional
 
+  export let height = "100%";
+  export let width = "100%";
+
   export let globally = false;
   let map;
 
@@ -16,7 +19,7 @@
   let zoom = 13;
   let center = $mapStore.center;
 
-  const genGmapApiLink = (key: string) => `https://maps.googleapis.com/maps/api/js?key=${key}&callback=mapLoaded`;
+  const genGmapApiLink = (key: string) => `https://maps.googleapis.com/maps/api/js?key=${key}&callback=mapLoaded&libraries=places`;
 
   onMount(() => {
     const mapLoaded = async () => {
@@ -47,7 +50,7 @@
 </script>
 
 <!-- This is tailwind css class change with whatever fits to your case. -->
-<div class="map-container" bind:this={container} />
+<div class="map-container" bind:this={container} style="--height:{height}; --width:{width}" />
 <svelte:head>
   {#if src}
     <script defer async {src}></script>
@@ -57,7 +60,7 @@
 
 <style>
   .map-container {
-    width: 100%;
-    height: 100%;
+    width: var(--width);
+    height: var(--height);
   }
 </style>

@@ -3,8 +3,8 @@
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
   import Egg from "$components/modals/Egg.svelte";
-  import EggIcon from "$components/svg/Egg.svelte";
   import Login from "$components/modals/Login.svelte";
+  import EggIcon from "$components/svg/Egg.svelte";
   import In from "$components/svg/In.svelte";
   import Locate from "$components/svg/Locate.svelte";
   import Out from "$components/svg/Out.svelte";
@@ -32,7 +32,12 @@
 </script>
 
 <svelte:window on:blur={onBlur} on:focus={onBlur} />
-<div class="collected-container"><EggIcon /> {$page.data.eggsCollected?.length}</div>
+<div class="collected-container">
+  <div class="collected-wrapper">
+    <div class="egg-wrapper"><EggIcon /></div>
+    <div class="num-wrapper">{$page.data.eggsCollected?.length}</div>
+  </div>
+</div>
 
 <div class="user-bar">
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
@@ -64,12 +69,25 @@
     align-items: center;
     font-size: 1rem;
     font-weight: bold;
-    height: 30px;
+    height: 80px;
     z-index: 9;
-    height: 50px;
-    width: 100px;
     right: 0px;
+    justify-content: center;
+  }
+  .collected-wrapper {
     background-color: white;
+    display: flex;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+  }
+  .egg-wrapper {
+    flex: 0 1 50%;
+  }
+  .num-wrapper {
+    flex: 0 0 30%;
   }
   .user-bar {
     display: flex;

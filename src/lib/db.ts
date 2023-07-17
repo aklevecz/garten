@@ -49,6 +49,10 @@ const getMarkers = (hunt: Hunts) => {
   return markers.filter((m) => m.hunt === hunt);
 };
 
+const addMarker = (marker: HuntMarker) => {
+  markers.push(marker);
+};
+
 const checkMarker = (name: string) => markers.find((m) => m.name === name)?.found;
 
 const getMarkerByCode = (code: string) => markers.find((m) => m.code === code);
@@ -63,4 +67,4 @@ const getHuntersCollected = (hunt: Hunts, hunter: string) => {
   return huntedMarkers;
 };
 
-export default { getMarkers, checkMarker, getActiveHunt, getMarkerByCode, claimMarker, getHuntersCollected };
+export default { getMarkers, addMarker, checkMarker, getActiveHunt, getMarkerByCode, claimMarker, getHuntersCollected };

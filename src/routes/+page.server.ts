@@ -28,6 +28,7 @@ export const actions = {
       locals.hunter = hunter;
       console.log("+page.server.ts actions :", locals);
     } catch (e) {
+      console.log(e);
       throw error(501, requestErrors.signInFailed);
     }
   },

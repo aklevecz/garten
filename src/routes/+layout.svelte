@@ -5,7 +5,7 @@
   // import type { LayoutData } from "./$types";
   // export let data: LayoutData;
   $: {
-    console.log("+layout.svelte, $page.data:", $page.data);
+    // console.log("+layout.svelte, $page.data:", $page.data);
     if ($page.data.hunter) {
       userStore.init($page.data.hunter);
     }

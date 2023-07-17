@@ -8,6 +8,7 @@
   import In from "$components/svg/In.svelte";
   import Locate from "$components/svg/Locate.svelte";
   import Out from "$components/svg/Out.svelte";
+  import { getHunterFoundCount } from "$lib/markerUtils";
   import mapStore from "$stores/map";
   import type { PageData } from "./$types";
   export let data: PageData;
@@ -35,7 +36,7 @@
 <div class="collected-container">
   <div class="collected-wrapper">
     <div class="egg-wrapper"><EggIcon /></div>
-    <div class="num-wrapper">{$page.data.eggsCollected?.length}</div>
+    <div class="num-wrapper">{getHunterFoundCount($page.data.markers, $page.data.hunter)}</div>
   </div>
 </div>
 

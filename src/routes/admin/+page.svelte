@@ -5,6 +5,8 @@
 
   export let data: PageData;
 
+  let position = { lat: 0, lng: 0 };
+
   function onLoad(e: CustomEvent) {
     let map = e.detail.map as google.maps.Map;
     // new google.maps.Marker({ position: map.getCenter(), map, draggable: true });
@@ -23,7 +25,11 @@
       const places = searchBox.getPlaces();
       if (places && places.length && places[0].geometry) {
         const placeMarker = new google.maps.Marker({ position: places[0].geometry.location, map, draggable: true });
-        placeMarker.addListener("drag", console.log);
+        placeMarker.addListener("drag", (e: any) => {
+          const lat = e.latLng.lat();
+          const lng = e.latLng.lng();
+          position = { lat, lng };
+        });
       }
     });
   }
@@ -38,7 +44,11 @@
   </div>
 {/each}
 <form method="POST" action="?/add" use:enhance>
-  <input name="name" />
+  <input placeholder="name" name="name" />
+  <input placeholder="hunt" name="hunt" value={data.hunt} />
+  <input placeholder="code" name="code" />
+  <input placeholder="lat" name="lat" bind:value={position.lat} />
+  <input placeholder="lng" name="lng" bind:value={position.lng} />
   <button>submit</button>
 </form>
 <GoogleMaps height="300px" on:load={onLoad} />

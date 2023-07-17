@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ params, locals }) => {
   const { code } = params;
-  const marker = db.getMarkerByCode(code);
+  const marker = await db.getMarkerByCode(code);
   if (!marker) {
     throw error(404, "the code does not exist");
   }
@@ -12,6 +12,6 @@ export const load = (async ({ params, locals }) => {
     code,
     marker,
     hunter: locals.hunter,
-    eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
+    markers: db.getMarkers(db.getActiveHunt().name),
   };
 }) satisfies PageServerLoad;

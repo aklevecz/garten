@@ -35,7 +35,7 @@
   }
 </script>
 
-<svelte:window on:blur={onBlur} on:focus={onBlur} />
+<svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
 <div class="collected-container">
   <div class="collected-wrapper">
     <div class="egg-wrapper"><EggIcon /></div>

@@ -25,9 +25,13 @@
       const places = searchBox.getPlaces();
       if (places && places.length && places[0].geometry) {
         const placeMarker = new google.maps.Marker({ position: places[0].geometry.location, map, draggable: true });
+        let location = places[0].geometry.location;
+        let lat = location?.lat()!;
+        let lng = location?.lng()!;
+        position = { lat, lng };
         placeMarker.addListener("drag", (e: any) => {
-          const lat = e.latLng.lat();
-          const lng = e.latLng.lng();
+          lat = e.latLng.lat();
+          lng = e.latLng.lng();
           position = { lat, lng };
         });
       }

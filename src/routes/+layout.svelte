@@ -8,6 +8,8 @@
     // console.log("+layout.svelte, $page.data:", $page.data);
     if ($page.data.hunter) {
       userStore.init($page.data.hunter);
+    } else {
+      userStore.reset();
     }
   }
 </script>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from "$app/forms";
   import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
@@ -22,7 +23,9 @@
   }
 
   $: {
+    $page.data.hunter;
     if (mapLoaded && data.markers) {
+      console.log("INIT");
       initHunt();
     }
   }
@@ -42,8 +45,11 @@
 
 <div class="user-bar">
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
-  {#if $page.data.hunter}<form method="POST">
-      <button formaction="/?/logout" class="small">{$page.data.hunter.slice(0, 10)}<Out /></button>
+  {#if $page.data.hunter}<form method="POST" use:enhance>
+      <button formaction="/?/logout" class="small"
+        >{$page.data.hunter.slice(0, 10)}
+        <div class="icon-wrapper"><Out /></div></button
+      >
     </form>{/if}
   {#if !$page.data.hunter}<button
       class="small"
@@ -109,8 +115,13 @@
     background-color: white;
     color: black;
     align-items: center;
+    justify-content: space-between;
     border-radius: 10px;
-    width: 120px;
+    width: 100px;
+  }
+  .icon-wrapper {
+    width: 25px;
+    height: 25px;
   }
   .user-position {
     position: absolute;

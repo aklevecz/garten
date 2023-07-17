@@ -13,6 +13,9 @@ function createStore() {
     init: (hunter: string) => {
       update((u) => ({ ...u, hunter }));
     },
+    reset: () => {
+      userStore.set({ hunter: "" });
+    },
   };
 }
 

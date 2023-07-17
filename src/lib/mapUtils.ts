@@ -3,6 +3,7 @@ const createMarker = (map: google.maps.Map, position: google.maps.LatLngLiteral,
     position,
     map,
     title,
+    zIndex: title === "user" ? 0 : 1,
   });
   return newMarker;
 };

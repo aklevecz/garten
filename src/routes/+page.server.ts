@@ -13,6 +13,7 @@ export const load = (async ({ cookies, locals }) => {
   return {
     markers,
     hunter,
+    // client side?
     eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
   };
 }) satisfies PageServerLoad;
@@ -24,7 +25,7 @@ export const actions = {
     // return fail(400, { problem: "Bio must be less than 260 characters" });
     try {
       const sealed = await Iron.seal({ hunter }, SESSION_SECRET, Iron.defaults);
-      cookies.set(cookieKeys.hunter, sealed);
+      cookies.set(cookieKeys.hunter, sealed, { path: "/", httpOnly: true, secure: true });
       locals.hunter = hunter;
       console.log("+page.server.ts actions :", locals);
     } catch (e) {

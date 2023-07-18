@@ -84,8 +84,7 @@ const getMarkers = async (hunt: Hunts): Promise<HuntMarker[]> => {
   const m = markers.filter((m) => m.hunt === hunt);
 
   const res = await docClient.send(command);
-  console.log(res.Items);
-  return res.Items;
+  return res.Items as HuntMarker[];
 };
 
 const addMarker = async (marker: HuntMarker) => {
@@ -99,7 +98,6 @@ const addMarker = async (marker: HuntMarker) => {
     },
   });
   const res = await docClient.send(command);
-  console.log(res);
 };
 
 const checkMarker = (name: string) => markers.find((m) => m.name === name)?.found;
@@ -143,7 +141,6 @@ const claimMarker = async (marker: HuntMarker, finder: string) => {
   });
 
   const res = await docClient.send(command);
-  console.log(res);
 };
 
 const getHuntersCollected = (hunt: Hunts, hunter: string) => {

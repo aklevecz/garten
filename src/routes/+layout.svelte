@@ -37,6 +37,7 @@
   :global(.h2) {
     font-size: 2.5rem;
     font-weight: bold;
+    text-align: left;
   }
   :global(button) {
     background: black;

@@ -1,12 +1,13 @@
 import db from "$lib/db";
 import type { Hunts } from "$lib/types";
 import type { Actions } from "@sveltejs/kit";
-import type { PageLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 
 export const load = (async () => {
   const hunt = db.getActiveHunt().name;
+  console.log(hunt);
   return { hunt, markers: db.getMarkers(hunt) };
-}) satisfies PageLoad;
+}) satisfies PageServerLoad;
 
 export const actions = {
   add: async ({ request }) => {

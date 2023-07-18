@@ -19,12 +19,12 @@
 </script>
 
 <Modal bind:showModal>
-  <div class="h2">LOGIN</div>
+  <div class="h2">IDENTIFY</div>
   <div>
     <form method="POST" action="/?/login" use:enhance>
       <div class="form-control">
         <label for="hunter" class="label">
-          <div class="label-text">address</div>
+          <div class="label-text">address/phone/email</div>
         </label>
         <input name="hunter" class="input" value={hunter || "testing"} />
       </div>

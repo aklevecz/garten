@@ -36,13 +36,6 @@
 </script>
 
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
-<div class="collected-container">
-  <div class="collected-wrapper">
-    <div class="egg-wrapper"><EggIcon /></div>
-    <div class="num-wrapper">{getHunterFoundCount($page.data.markers, $page.data.hunter)}</div>
-  </div>
-</div>
-
 <div class="user-bar">
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
@@ -55,9 +48,17 @@
       class="small"
       on:click={() => {
         showModal = true;
-      }}>signin<In /></button
+      }}>identify<In /></button
     >{/if}
 </div>
+
+<div class="collected-container">
+  <div class="collected-wrapper">
+    <div class="egg-wrapper"><EggIcon /></div>
+    <div class="num-wrapper">{getHunterFoundCount($page.data.markers, $page.data.hunter)}</div>
+  </div>
+</div>
+
 <Login bind:showModal />
 <Egg />
 <GoogleMaps
@@ -78,7 +79,7 @@
     font-weight: bold;
     height: 80px;
     z-index: 9;
-    right: 0px;
+    right: 10px;
     justify-content: center;
   }
   .collected-wrapper {

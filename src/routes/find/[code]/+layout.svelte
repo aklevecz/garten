@@ -24,21 +24,29 @@
 
 <div class="layout-container">
   <div class="hunter">
-    <div class:hide={!hunter}>
+    <div class="hunter-name" class:hide={!hunter}>
       {hunter?.slice(0, 20)}
       {hunter.length > 20 ? "..." : ""}
     </div>
 
-    <div class="collected-container"><Egg /> {getHunterFoundCount(markers, hunter)}</div>
-    <form method="POST" use:enhance>
-      {#if hunter}<button formaction="/?/logout"><Out /></button>{/if}
-    </form>
-    {#if !hunter}<button
-        on:click={() => {
-          showModal = true;
-        }}><In /></button
-      >{/if}
-    <Login bind:showModal />
+    <div class:hide={!hunter} class="collected-container">
+      <div class="egg-wrapper"><Egg /></div>
+      <div>{getHunterFoundCount(markers, hunter)}</div>
+    </div>
+    <div class="buttons">
+      <form method="POST" use:enhance>
+        {#if hunter}<button formaction="/?/logout"><Out /></button>{/if}
+      </form>
+      {#if !hunter}<button
+          style="width:150px;"
+          on:click={() => {
+            showModal = true;
+          }}
+          ><div>identify</div>
+          <div class="egg-wrapper"><In /></div></button
+        >{/if}
+      <Login bind:showModal />
+    </div>
   </div>
   <slot />
 </div>
@@ -64,9 +72,12 @@
     align-items: center;
     justify-content: space-between;
     /* gap: 50px; */
-    width: 100%;
+    width: 100vw;
     text-align: center;
     padding: 2px 10px;
+  }
+  .hunter-name {
+    /* flex: 1 0 auto; */
   }
   .collected-container {
     display: flex;
@@ -74,6 +85,19 @@
     font-size: 1rem;
     font-weight: bold;
     height: 30px;
+  }
+  .egg-wrapper {
+    width: 30px;
+    height: 30px;
+  }
+  .buttons {
+    /* flex: 1 0 auto; */
+  }
+  button {
+    display: flex;
+    color: black;
+    /* height: 50px; */
+    /* width: 150px; */
   }
   .hide {
     display: none;

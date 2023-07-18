@@ -1,9 +1,16 @@
-const createMarker = (map: google.maps.Map, position: google.maps.LatLngLiteral, title: string) => {
+const createMarker = (
+  map: google.maps.Map,
+  position: google.maps.LatLngLiteral | google.maps.LatLng,
+  title: string,
+  icon: any = null
+) => {
   const newMarker = new google.maps.Marker({
     position,
     map,
     title,
+    icon,
     zIndex: title === "user" ? 0 : 1,
+    draggable: true,
   });
   return newMarker;
 };
@@ -24,4 +31,15 @@ const svgMarker = () => {
   return svgMarker;
 };
 
-export default { createMarker, svgMarker };
+const eggIcon = () => {
+  const brokenEggYours = "/egg-broken-smoll-map-icon-yours.svg";
+  const brokeEggTheirs = "/egg-broken-smoll-map-icon-others.svg";
+  const eggIcon = "/egg-smoll-map-icon.svg";
+  return {
+    // url: `data:image/svg+xml;base64,${svg}`,
+    url: eggIcon,
+    scaledSize: new google.maps.Size(45, 45),
+  };
+};
+
+export default { createMarker, svgMarker, eggIcon };

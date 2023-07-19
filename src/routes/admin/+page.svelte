@@ -113,29 +113,34 @@
     };
     eggImg.src = "http://localhost:5173/egg-qr-template.png";
   };
+  let showForm = true;
 </script>
 
 <div class="container">
   <h1>Admin</h1>
-  <div class="marker-container">
-    {#each data.markers as marker}
-      <div class="marker-wrapper">
-        <div>{marker.name}</div>
-        <div>{marker.hunt}</div>
-        <div>{marker.code}</div>
-        <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button>
-      </div>
-    {/each}
+  <div class="button-container"><button on:click={() => (showForm = !showForm)}>form</button></div>
+
+  <div class:hide={!showForm}>
+    <div class="marker-container">
+      {#each data.markers as marker}
+        <div class="marker-wrapper">
+          <div>{marker.name}</div>
+          <div>{marker.hunt}</div>
+          <div>{marker.code}</div>
+          <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button>
+        </div>
+      {/each}
+    </div>
+    <form method="POST" action="?/add" use:enhance>
+      <input placeholder="name" name="name" />
+      <input placeholder="hunt" name="hunt" value={data.hunt} />
+      <input placeholder="code" name="code" />
+      <input placeholder="lat" name="lat" bind:value={position.lat} />
+      <input placeholder="lng" name="lng" bind:value={position.lng} />
+      <div><button>create</button></div>
+    </form>
+    <canvas bind:this={canvasRef} width="1275" height="1650" />
   </div>
-  <form method="POST" action="?/add" use:enhance>
-    <input placeholder="name" name="name" />
-    <input placeholder="hunt" name="hunt" value={data.hunt} />
-    <input placeholder="code" name="code" />
-    <input placeholder="lat" name="lat" bind:value={position.lat} />
-    <input placeholder="lng" name="lng" bind:value={position.lng} />
-    <div><button>create</button></div>
-  </form>
-  <canvas bind:this={canvasRef} width="1275" height="1650" />
   <div class="map-container" bind:this={mapContainer}>
     <GoogleMaps height="100%" on:load={onLoad} />
   </div>
@@ -155,6 +160,12 @@
 <button class="user-position" style="bottom:100px;" on:click={onMarkClick}>MARK</button>
 
 <style>
+  .hide {
+    display: none;
+  }
+  .button-container {
+    display: flex;
+  }
   canvas {
     width: 100px;
   }

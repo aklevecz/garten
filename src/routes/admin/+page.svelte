@@ -160,6 +160,9 @@
 <button class="user-position" style="bottom:100px;" on:click={onMarkClick}>MARK</button>
 
 <style>
+  h1 {
+    margin: 0px;
+  }
   .hide {
     display: none;
   }

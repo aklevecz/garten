@@ -23,6 +23,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.370.0",
     "@aws-sdk/lib-dynamodb": "^3.370.0",
-    "@hapi/iron": "^7.0.1"
+    "@hapi/iron": "^7.0.1",
+    "qrcode": "^1.5.3"
   }
 }

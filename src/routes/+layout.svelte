@@ -19,9 +19,11 @@
 <style>
   :root {
     --green: #84ff00;
+    /* --green: red;0 */
   }
   :global(*) {
     box-sizing: border-box;
+    touch-action: manipulation;
   }
   :global(html, body) {
     padding: 0px;

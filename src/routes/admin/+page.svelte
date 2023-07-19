@@ -122,6 +122,11 @@
 
   <div class:hide={!showForm}>
     <div class="marker-container">
+      <div class="marker-wrapper heading">
+        <div>name</div>
+        <div>hunt</div>
+        <div>code</div>
+      </div>
       {#each data.markers as marker}
         <div class="marker-wrapper">
           <div>{marker.name}</div>
@@ -178,12 +183,19 @@
     height: 100%;
     padding: 8px;
   }
+  .marker-container {
+    margin: 10px 0px;
+  }
   .marker-wrapper {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     border: 1px solid black;
-    margin: 10px;
     padding: 4px;
+  }
+  .marker-wrapper.heading {
+    background-color: red;
   }
   form {
     display: flex;

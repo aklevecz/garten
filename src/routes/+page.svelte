@@ -10,9 +10,10 @@
   import Locate from "$components/svg/Locate.svelte";
   import Out from "$components/svg/Out.svelte";
   import { getHunterFoundCount } from "$lib/markerUtils";
-  import mapStore from "$stores/map";
+  import mapStore, { loadingLocation } from "$stores/map";
   import { onDestroy } from "svelte";
   import type { PageData } from "./$types";
+  import LoadingSpinner from "$components/LoadingSpinner.svelte";
   export let data: PageData;
 
   let mapLoaded = false;
@@ -36,11 +37,15 @@
 
   let unsubTrack = () => {};
   function trackUser() {
-    unsubTrack = mapStore.trackUser();
+    // track user creates user marker or just centers the map to the location of the last marker
+    const unsub = mapStore.trackUser();
+    if (unsub) {
+      unsubTrack = unsub;
+    }
   }
 
   onDestroy(() => {
-    if (unsubTrack) unsubTrack();
+    unsubTrack();
   });
 </script>
 
@@ -77,7 +82,13 @@
     console.log("+page.svelte:Map Loaded");
   }}
 />
-<button class="user-position" on:click={trackUser}><Locate /></button>
+<button class="user-position" on:click={trackUser}>
+  {#if $loadingLocation}
+    <LoadingSpinner />
+  {:else}
+    <Locate />
+  {/if}
+</button>
 
 <style>
   .collected-container {

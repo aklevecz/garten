@@ -5,24 +5,35 @@ import { get, writable } from "svelte/store";
 import { eggModal } from "./modal";
 import userStore from "./user";
 
+export const loadingLocation = writable(false);
+
 type MapStore = {
   map: google.maps.Map | null;
   center: google.maps.LatLngLiteral;
   markers: google.maps.Marker[];
   userMarker: google.maps.Marker | null;
+  watchinglocation: boolean;
 };
 
 function createStore() {
-  const mapStore = writable<MapStore>({ map: null, center: mapCenters.laColombe, markers: [], userMarker: null });
+  const mapStore = writable<MapStore>({
+    map: null,
+    center: mapCenters.laColombe,
+    markers: [],
+    userMarker: null,
+    watchinglocation: false,
+  });
   const { set, subscribe, update } = mapStore;
 
   // maputils, but has store effects
   const createUpdateUserMarker = (position: google.maps.LatLngLiteral) => {
     const mapState = get(mapStore);
-    const userMarker = mapState.userMarker
+    const markerExists = Boolean(mapState.userMarker);
+    const userMarker = markerExists
       ? mapState.userMarker
       : mapUtils.createMarker(mapState.map!, position, "user", mapUtils.smilerIcon());
     update((m) => ({ ...m, userMarker }));
+    return { markerExists };
   };
 
   return {
@@ -87,28 +98,40 @@ function createStore() {
     },
     createUpdateUserMarker,
     trackUser: () => {
-      console.log("trackling");
+      const { watchinglocation, userMarker, map } = get(mapStore);
+      if (watchinglocation && userMarker && map) {
+        const coords = userMarker.getPosition();
+        const lat = coords?.lat()!;
+        const lng = coords?.lng()!;
+        map.panTo({ lat, lng });
+        // return false so that the page does not update the unsub for the tracking -- janky
+        return false;
+      }
+      loadingLocation.set(true);
       let centered = false;
       function success(e: any) {
-        console.log("sccesss");
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
 
         if (!centered) {
           centered = true;
-          get(mapStore).map?.panTo({ lat, lng });
+          map!.panTo({ lat, lng });
         }
 
-        createUpdateUserMarker({ lat, lng });
+        const { markerExists } = createUpdateUserMarker({ lat, lng });
 
-        let interval = setInterval(animateMarker, 500);
-        function animateMarker() {
-          const markerEl: Element | null = document.querySelector("img[src='/smiler.svg']");
-          if (markerEl) {
-            (markerEl as HTMLElement).style.setProperty("animation", "pulse 1000ms infinite ease-in alternate");
-            clearInterval(interval);
+        if (!markerExists) {
+          let interval = setInterval(animateMarker, 500);
+          function animateMarker() {
+            const markerEl: Element | null = document.querySelector("img[src='/smiler.svg']");
+            if (markerEl) {
+              (markerEl as HTMLElement).style.setProperty("animation", "pulse 1000ms infinite ease-in alternate");
+              clearInterval(interval);
+            }
           }
         }
+        update((m) => ({ ...m, watchinglocation: true }));
+        loadingLocation.set(false);
       }
       function error(err: any) {
         console.error(`ERROR(${err.code}): ${err.message}`);

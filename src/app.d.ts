@@ -5,6 +5,7 @@ declare global {
     // interface Error {}
     interface Locals {
       hunter: string | undefined | null;
+      ip: string;
     }
     // interface PageData {}
     // interface Platform {}

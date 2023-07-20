@@ -61,9 +61,15 @@ function createStore() {
           },
         });
         mark.addListener("click", () => {
+          console.log(marker);
           eggModal.set({
             showModal: true,
-            data: { title: marker.name, found: marker.found || false, finder: marker.finder || "" },
+            data: {
+              title: marker.name,
+              found: marker.found || false,
+              finder: marker.finder || "",
+              isCracker: marker.isCracker || false,
+            },
           });
         });
         return mark;

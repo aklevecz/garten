@@ -7,8 +7,25 @@
 
 <Modal bind:showModal={$eggModal.showModal}>
   <div class="h2">{$eggModal.data?.title}</div>
-  {#if $eggModal.data.finder}<div>cracked by: {$eggModal.data.finder}</div>{:else}<div>
+  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div
+      style="letter-spacing:3px;"
+    >
       waiting to be cracked...
     </div>{/if}
   {#if $eggModal.data.found} <EggCracked />{:else}<Egg />{/if}
 </Modal>
+
+<style>
+  .cracked {
+    margin-top: 20px;
+    margin-bottom: -30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: bold;
+    color: red;
+  }
+  .is-cracker {
+    color: var(--green);
+  }
+</style>

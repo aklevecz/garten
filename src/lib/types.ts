@@ -8,6 +8,7 @@ export type HuntMarker = {
   code: string;
   found?: boolean;
   finder?: string;
+  isCracker?: boolean;
 };
 
 export type EggModal = Writable<{
@@ -16,5 +17,6 @@ export type EggModal = Writable<{
     title: string;
     found: boolean;
     finder: string;
+    isCracker: boolean;
   };
 }>;

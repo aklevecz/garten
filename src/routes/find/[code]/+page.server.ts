@@ -12,6 +12,7 @@ export const load = (async ({ params, locals }) => {
     code,
     marker,
     hunter: locals.hunter,
+    isCracker: locals.hunter === marker.finder,
     markers: db.getMarkers(db.getActiveHunt().name),
   };
 }) satisfies PageServerLoad;

@@ -51,18 +51,16 @@
 
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
 <div class="user-bar">
+  {$page.data.hunter.slice(0, 10)}
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
-      <button formaction="/?/logout" class="small"
-        >{$page.data.hunter.slice(0, 10)}
-        <div class="icon-wrapper"><Out /></div></button
-      >
+      <button formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
     </form>{/if}
-  {#if !$page.data.hunter}<button
+  {#if !$page.data.hunter}identify<button
       class="small"
       on:click={() => {
         showModal = true;
-      }}>identify<In /></button
+      }}><In /></button
     >{/if}
 </div>
 
@@ -130,15 +128,20 @@
     gap: 4px;
     font-size: 12px;
     border-radius: 10px;
+    background-color: black;
+    color: white;
+    /* border: 2px solid black; */
   }
   .user-bar button.small {
+    border: none;
     display: flex;
     background-color: white;
     color: black;
     align-items: center;
     justify-content: space-between;
     border-radius: 10px;
-    width: 100px;
+    margin: 5px;
+    height: 30px;
   }
   .icon-wrapper {
     width: 25px;

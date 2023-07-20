@@ -20,11 +20,12 @@
 
 <Modal bind:showModal>
   <div class="h2">IDENTIFY</div>
+  <div>some way i can contact you for prizes</div>
   <div>
     <form method="POST" action="/?/login" use:enhance>
       <div class="form-control">
         <label for="hunter" class="label">
-          <div class="label-text">address/phone/email</div>
+          <div class="label-text">eth.address/phone/email</div>
         </label>
         <input name="hunter" class="input" value={hunter || "testing"} />
       </div>
@@ -48,7 +49,7 @@
   .label-text {
     font-weight: bold;
     padding: 0px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: 2px;
   }
   input {

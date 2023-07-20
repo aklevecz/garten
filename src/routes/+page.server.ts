@@ -16,7 +16,7 @@ export const load = (async ({ cookies, locals }) => {
 
   console.log("+page.server.ts load :", locals.hunter);
   return {
-    markers,
+    markers: markers.map((m) => ({ ...m, isCracker: m.finder === hunter })),
     hunter,
     // client side?
     // eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
@@ -32,6 +32,7 @@ export const actions = {
       const sealed = await Iron.seal({ hunter }, SESSION_SECRET, Iron.defaults);
       cookies.set(cookieKeys.hunter, sealed, { path: "/", httpOnly: true, secure: true });
       locals.hunter = hunter;
+      await db.saveUserIP(hunter, locals.ip);
       console.log("+page.server.ts actions :", locals);
     } catch (e) {
       console.log(e);

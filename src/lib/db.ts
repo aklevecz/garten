@@ -128,13 +128,41 @@ const claimMarker = async (marker: HuntMarker, finder: string) => {
   }
 };
 
+const saveUserIP = async (hunter: string, ip: string) => {
+  const command = new PutCommand({
+    TableName: table,
+    Item: {
+      pk: `USER#${hunter}`,
+      sk: `IP#${ip}`,
+    },
+  });
+
+  try {
+    await docClient.send(command);
+
+    return { success: true };
+  } catch (e) {
+    console.error("error while saving user ip", e);
+    return null;
+  }
+};
+
 // deprecated?
 const getHuntersCollected = (hunt: Hunts, hunter: string) => {
   const huntedMarkers = markers.filter((marker) => marker.hunt === hunt && marker.finder === hunter);
   return huntedMarkers;
 };
 
-export default { getMarkers, addMarker, checkMarker, getActiveHunt, getMarkerByCode, claimMarker, getHuntersCollected };
+export default {
+  getMarkers,
+  addMarker,
+  checkMarker,
+  getActiveHunt,
+  getMarkerByCode,
+  claimMarker,
+  getHuntersCollected,
+  saveUserIP,
+};
 
 // @todo markers hunt mapping
 // @todo marker groups?

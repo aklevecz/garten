@@ -11,6 +11,7 @@
   import Out from "$components/svg/Out.svelte";
   import { getHunterFoundCount } from "$lib/markerUtils";
   import mapStore from "$stores/map";
+  import { onDestroy } from "svelte";
   import type { PageData } from "./$types";
   export let data: PageData;
 
@@ -19,13 +20,12 @@
 
   function initHunt() {
     const { markers } = data;
-    const googleMarkers = mapStore.setMarkers(markers);
+    mapStore.setMarkers(markers);
   }
 
   $: {
     $page.data.hunter;
     if (mapLoaded && data.markers) {
-      console.log("INIT");
       initHunt();
     }
   }
@@ -33,6 +33,15 @@
   function onBlur() {
     invalidateAll();
   }
+
+  let unsubTrack = () => {};
+  function trackUser() {
+    unsubTrack = mapStore.trackUser();
+  }
+
+  onDestroy(() => {
+    if (unsubTrack) unsubTrack();
+  });
 </script>
 
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
@@ -68,7 +77,7 @@
     console.log("+page.svelte:Map Loaded");
   }}
 />
-<button class="user-position" on:click={() => mapStore.trackUser()}><Locate /></button>
+<button class="user-position" on:click={trackUser}><Locate /></button>
 
 <style>
   .collected-container {

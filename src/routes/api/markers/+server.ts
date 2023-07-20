@@ -1,7 +1,7 @@
 import db from "$lib/db";
-import { json } from "@sveltejs/kit";
-import type { RequestEvent, RequestHandler } from "./$types";
 import type { HuntMarker } from "$lib/types";
+import { json } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async () => {
   return json({ markers: await db.getMarkers("fwb-fest") });

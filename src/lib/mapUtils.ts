@@ -42,4 +42,13 @@ const eggIcon = () => {
   };
 };
 
-export default { createMarker, svgMarker, eggIcon };
+const smilerIcon = () => {
+  const url = "/smiler.svg";
+
+  return {
+    url,
+    scaledSize: new google.maps.Size(30, 30),
+  };
+};
+
+export default { createMarker, svgMarker, eggIcon, smilerIcon };

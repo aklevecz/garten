@@ -8,13 +8,18 @@ import type { PageServerLoad } from "./$types";
 export const load = (async ({ cookies, locals }) => {
   // this could come from the cookie if hooks.server is not used
   const hunter = locals.hunter;
-  const markers = db.getMarkers("fwb-fest");
+  const markers = await db.getMarkers("fwb-fest");
+
+  if (!markers) {
+    throw error(404, "markers not found");
+  }
+
   console.log("+page.server.ts load :", locals.hunter);
   return {
     markers,
     hunter,
     // client side?
-    eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
+    // eggsCollected: locals.hunter ? db.getHuntersCollected(db.getActiveHunt().name, locals.hunter) : [],
   };
 }) satisfies PageServerLoad;
 

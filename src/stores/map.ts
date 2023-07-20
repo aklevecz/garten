@@ -21,7 +21,7 @@ function createStore() {
     const mapState = get(mapStore);
     const userMarker = mapState.userMarker
       ? mapState.userMarker
-      : mapUtils.createMarker(mapState.map!, position, "user");
+      : mapUtils.createMarker(mapState.map!, position, "user", mapUtils.smilerIcon());
     update((m) => ({ ...m, userMarker }));
   };
 
@@ -87,10 +87,28 @@ function createStore() {
     },
     createUpdateUserMarker,
     trackUser: () => {
+      console.log("trackling");
+      let centered = false;
       function success(e: any) {
+        console.log("sccesss");
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
+
+        if (!centered) {
+          centered = true;
+          get(mapStore).map?.panTo({ lat, lng });
+        }
+
         createUpdateUserMarker({ lat, lng });
+
+        let interval = setInterval(animateMarker, 500);
+        function animateMarker() {
+          const markerEl: Element | null = document.querySelector("img[src='/smiler.svg']");
+          if (markerEl) {
+            (markerEl as HTMLElement).style.setProperty("animation", "pulse 1000ms infinite ease-in alternate");
+            clearInterval(interval);
+          }
+        }
       }
       function error(err: any) {
         console.error(`ERROR(${err.code}): ${err.message}`);

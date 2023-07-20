@@ -1,12 +1,17 @@
 import db from "$lib/db";
 import type { Hunts } from "$lib/types";
-import type { Actions } from "@sveltejs/kit";
+import { error, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { cleanString } from "$lib/utils";
 
 export const load = (async () => {
   const hunt = db.getActiveHunt().name;
-  console.log(hunt);
-  return { hunt, markers: db.getMarkers(hunt) };
+  const markers = await db.getMarkers(hunt);
+
+  if (!markers) {
+    throw error(404, "no markers found");
+  }
+  return { hunt, markers };
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -17,11 +22,15 @@ export const actions = {
     const hunt = data.get("hunt") as Hunts;
     const lat = data.get("lat") as string;
     const lng = data.get("lng") as string;
-    db.addMarker({
-      name,
-      code,
-      hunt: hunt,
+    const res = await db.addMarker({
+      name: cleanString(name),
+      code: cleanString(code),
+      hunt: cleanString(hunt) as Hunts,
       position: { lat: parseFloat(lat), lng: parseFloat(lng) },
     });
+    if (res?.success) {
+      return res;
+    }
+    throw error(400, "failed to add marker");
   },
 } satisfies Actions;

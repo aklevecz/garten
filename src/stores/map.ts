@@ -119,7 +119,7 @@ function createStore() {
       function success(e: any) {
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
-
+        console.log(lat, lng);
         if (!centered) {
           centered = true;
           map!.panTo({ lat, lng });

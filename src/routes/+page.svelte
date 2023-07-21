@@ -52,6 +52,8 @@
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
 <div class="user-bar">
   {$page.data.hunter.slice(0, 10)}
+  {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()}
+
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
       <button formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>

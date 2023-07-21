@@ -32,6 +32,7 @@ function createStore() {
     const userMarker = markerExists
       ? mapState.userMarker
       : mapUtils.createMarker(mapState.map!, position, "user", mapUtils.smilerIcon());
+    userMarker?.setPosition(position);
     update((m) => ({ ...m, userMarker }));
     return { markerExists };
   };
@@ -116,7 +117,6 @@ function createStore() {
       loadingLocation.set(true);
       let centered = false;
       function success(e: any) {
-        alert("success");
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
 

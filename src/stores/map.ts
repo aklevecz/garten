@@ -116,6 +116,7 @@ function createStore() {
       loadingLocation.set(true);
       let centered = false;
       function success(e: any) {
+        alert("success");
         const lat = e.coords.latitude;
         const lng = e.coords.longitude;
 
@@ -143,7 +144,10 @@ function createStore() {
         console.error(`ERROR(${err.code}): ${err.message}`);
       }
       let watchFrame = navigator.geolocation.watchPosition(success, error, { maximumAge: 0, enableHighAccuracy: true });
-      return () => navigator.geolocation.clearWatch(watchFrame);
+      return () => {
+        navigator.geolocation.clearWatch(watchFrame);
+        console.log("clearing watch");
+      };
     },
   };
 }

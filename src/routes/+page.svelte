@@ -50,6 +50,7 @@
   onMount(() => {
     if (!local().hasSeenInfo) {
       showInfoModal = true;
+      local().set("has-seen-info", "true");
     }
   });
 

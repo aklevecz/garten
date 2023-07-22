@@ -73,7 +73,7 @@
     justify-content: space-between;
     /* gap: 50px; */
     width: 100vw;
-    text-align: center;
+    /* text-align: center; */
     padding: 2px 10px;
   }
   .hunter-name {

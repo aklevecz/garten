@@ -164,6 +164,7 @@ export default {
   saveUserIP,
 };
 
+// DEPRECATED
 // @todo markers hunt mapping
 // @todo marker groups?
 // MARKER#marker_name/id HUNT#<hunt_name>

@@ -11,9 +11,11 @@
   import Out from "$components/svg/Out.svelte";
   import { getHunterFoundCount } from "$lib/markerUtils";
   import mapStore, { loadingLocation } from "$stores/map";
-  import { onDestroy } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
   import LoadingSpinner from "$components/LoadingSpinner.svelte";
+  import local from "$lib/local";
+  import Info from "$components/modals/Info.svelte";
   export let data: PageData;
 
   let mapLoaded = false;
@@ -44,16 +46,23 @@
     }
   }
 
+  let showInfoModal = false;
+  onMount(() => {
+    if (!local().hasSeenInfo) {
+      showInfoModal = true;
+    }
+  });
+
   onDestroy(() => {
     unsubTrack();
   });
 </script>
 
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
+<Info bind:showModal={showInfoModal} />
 <div class="user-bar">
   {$page.data.hunter.slice(0, 10)}
-  {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()}
-
+  <!-- {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()} -->
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
       <button formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>

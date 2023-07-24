@@ -22,6 +22,8 @@ export const GET: RequestHandler = async () => {
 
 // something comes out of the egg
 
+// you have to come to the gallery to crack it
+
 export const POST = async ({ request, locals, cookies }) => {
   const data = await request.json();
   const { code } = data;

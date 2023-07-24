@@ -66,7 +66,7 @@
   <!-- {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()} -->
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
-      <button formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
+      <button disabled={true} formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
     </form>{/if}
   {#if !$page.data.hunter}identify<button
       class="small"

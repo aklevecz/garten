@@ -19,4 +19,5 @@ export const modalKeys = {
 
 export const requestErrors = {
   signInFailed: "Hunter sign in failed",
+  notSignedIn: "You must be identified to do this",
 };

@@ -3,18 +3,28 @@
   import Egg from "$components/svg/Egg.svelte";
   export let showModal = false;
   let eggDim = "30px";
+
+  const inlineEgg = {
+    component: Egg,
+    options: {
+      width: eggDim,
+      height: eggDim,
+      viewBox: "-2 -4 16 16",
+      style: "overflow:visible;",
+    },
+  };
 </script>
 
 <Modal bind:showModal>
   <h2>
-    <Egg width={eggDim} height={eggDim} style="padding-top:20px;" /> welcome to the hunt! <Egg
-      width={eggDim}
-      height={eggDim}
+    <svelte:component this={inlineEgg.component} {...inlineEgg.options} /> welcome to the hunt! <svelte:component
+      this={inlineEgg.component}
+      {...inlineEgg.options}
     />
   </h2>
   <p class="line">
-    there are <Egg width={eggDim} height={eggDim} />'s hidden around the area. find the most & win two passes to FWB
-    fest.
+    there are <svelte:component this={inlineEgg.component} {...inlineEgg.options} />'s hidden around the area. find the
+    most & win two passes to FWB fest.
   </p>
   <p class="line">
     when you find an egg, scan the QR code on it, and click the CRACK button.feel free to take the card as a souvenior
@@ -40,5 +50,6 @@
   button {
     margin: 10px auto 5px;
     display: block;
+    padding: 8px 10px;
   }
 </style>

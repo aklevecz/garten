@@ -4,6 +4,8 @@ import Iron from "@hapi/iron";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
+// NOT BEING USED?
+
 export const GET: RequestHandler = async ({ cookies }) => {
   const cookie = cookies.get(cookieKeys.hunter) as string;
   try {

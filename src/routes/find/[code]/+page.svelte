@@ -19,8 +19,16 @@
   $: wasCracker = data.marker.finder === $page.data.hunter;
 
   $: markerFound = wasCracker ? "YOU GOT IT :)" : cracked ? "TOO LATE :(" : "CLAIMABLE";
+  let error = "";
+
+  let showModal = !isAuthed;
+  showModal = false;
+  function toggleModal() {
+    showModal = !showModal;
+  }
 </script>
 
+<Login bind:showModal />
 <div class="list-container">
   <div>
     <div class="label">egg_name</div>
@@ -31,6 +39,8 @@
     <div class:was-cracked={wasCracker} class="marker-found">{markerFound}</div>
   </div>
 </div>
+<div class="error">{error}</div>
+
 {#if cracked}
   <EggCracked />
 {:else}
@@ -39,14 +49,18 @@
 <button
   disabled={cracked}
   class="big bottom-black-yellow"
-  on:click={() =>
-    api.findMarker(data.code).then(() => {
-      invalidateAll();
-    })}>{buttonText}</button
+  on:click={() => {
+    api
+      .findMarker(data.code)
+      .then(() => {
+        invalidateAll();
+      })
+      .catch((err) => {
+        error = err;
+        // toggleModal();
+      });
+  }}>{buttonText}</button
 >
-{#if !isAuthed}
-  <Login showModal={true} />
-{/if}
 
 <style>
   .list-container {
@@ -79,5 +93,9 @@
   }
   .was-cracked {
     color: var(--green);
+  }
+  .error {
+    color: red;
+    text-align: center;
   }
 </style>

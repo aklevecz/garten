@@ -4,7 +4,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   const dispatch = createEventDispatcher();
 
-  import mapStyles from "$lib/map-styles"; // optional
+  import { blackMapStyle as mapStyles } from "$lib/map-styles"; // optional
 
   export let height = "100%";
   export let width = "100%";
@@ -18,8 +18,8 @@
   let container: HTMLDivElement;
   let zoom = 13;
   let center = $mapStore.center;
-
-  const genGmapApiLink = (key: string) => `https://maps.googleapis.com/maps/api/js?key=${key}&callback=mapLoaded&libraries=places`;
+  const genGmapApiLink = (key: string) =>
+    `https://maps.googleapis.com/maps/api/js?key=${key}&callback=mapLoaded&libraries=places`;
 
   onMount(() => {
     const mapLoaded = async () => {

@@ -1,6 +1,11 @@
 import type { Writable } from "svelte/store";
 
-export type Hunts = "fwb-fest" | "fwb-flower";
+export type Hunts = "fwb-fest" | "bao-eggs";
+export type Hunt = {
+  name: string;
+  position: google.maps.LatLngLiteral;
+  markerPath: string;
+};
 export type HuntMarker = {
   name: string;
   hunt: Hunts;

@@ -33,4 +33,22 @@ export const actions = {
     }
     throw error(400, "failed to add marker");
   },
+  addHunt: async ({ request }) => {
+    const data = await request.formData();
+    const name = data.get("name") as string;
+    const markerPath = data.get("marker-path") as string;
+    const lat = data.get("lat") as string;
+    const lng = data.get("lng") as string;
+
+    try {
+      await db.addHunt({
+        name: cleanString(name),
+        markerPath,
+        position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+      });
+      return { success: true };
+    } catch (e) {
+      return null;
+    }
+  },
 } satisfies Actions;

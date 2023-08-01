@@ -2,7 +2,16 @@
   import Modal from "$components/Modal.svelte";
   import Egg from "$components/svg/Egg.svelte";
   import EggCracked from "$components/svg/EggCracked.svelte";
+  import type { Hunt, Hunts } from "$lib/types";
   import { eggModal } from "$stores/modal";
+
+  const config: { [key in Hunts | string]: any } = {
+    "fwb-fest": { message: "find the bench :)" },
+    "bao-eggs": { message: "waiting to be cracked..." },
+  };
+
+  export let hunt: Hunt;
+  console.log(hunt);
 </script>
 
 <Modal bind:showModal={$eggModal.showModal}>
@@ -10,9 +19,11 @@
   {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div
       style="letter-spacing:3px;"
     >
-      waiting to be cracked...
+      {config[hunt.name].message}
     </div>{/if}
-  {#if $eggModal.data.found} <EggCracked />{:else}<Egg />{/if}
+  {#if hunt.name === "bao-eggs"}
+    {#if $eggModal.data.found} <EggCracked />{:else}<Egg />{/if}{/if}
+  <object title="modal-graphic" data="/park-bench-black.svg" />
 </Modal>
 
 <style>

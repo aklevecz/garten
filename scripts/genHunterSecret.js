@@ -26,7 +26,6 @@ function generateRandomSHA3Hash() {
 
 function main() {
   const input = args[0];
-  console.log(input);
   let hash = "";
   if (!input) {
     hash = generateRandomSHA3Hash();

@@ -144,6 +144,13 @@
       <input placeholder="lng" name="lng" bind:value={position.lng} />
       <div><button>create</button></div>
     </form>
+    <form method="POST" action="?/addHunt" use:enhance>
+      <input placeholder="name" name="name" />
+      <input placeholder="marker path" name="marker-path" />
+      <input placeholder="lat" name="lat" bind:value={position.lat} />
+      <input placeholder="lng" name="lng" bind:value={position.lng} />
+      <div><button>create hunt</button></div>
+    </form>
     <canvas bind:this={canvasRef} width="1275" height="1650" />
   </div>
   <div class="map-container" bind:this={mapContainer}>
@@ -202,6 +209,9 @@
     flex-direction: column;
     gap: 8px;
     width: 50%;
+    border: 1px solid black;
+    margin: 10px auto;
+    padding: 8px;
   }
   form > input {
     width: 200px;

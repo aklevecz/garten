@@ -2,7 +2,7 @@ import { mapCenters } from "$lib/constants";
 import type { HuntMarker, Hunts } from "./types";
 
 import { AWS_S3_ACCESS_KEY, AWS_S3_SECRET_KEY } from "$env/static/private";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { cleanString } from "./utils";
 
@@ -33,6 +33,50 @@ const getActiveHunt = () => {
   return hunts["fwb-fest"];
 };
 
+const getHunt = async (huntName: string) => {
+  const command = new GetCommand({
+    TableName: table,
+    Key: {
+      pk: `HUNT#${huntName}`,
+      sk: `HUNT#${huntName}`,
+    },
+  });
+
+  try {
+    const res = await docClient.send(command);
+    const { pk, position, markerPath } = res.Item!;
+    return { name: pk.replace("HUNT#", ""), position, markerPath };
+  } catch (e) {
+    return null;
+  }
+};
+
+const getHunts = async () => {
+  const command = new ScanCommand({
+    TableName: table,
+    FilterExpression: "begins_with(#DYNOBASE_sk, :sk)",
+    ExpressionAttributeNames: {
+      "#DYNOBASE_sk": "sk",
+    },
+    ExpressionAttributeValues: {
+      ":sk": { S: "HUNT#" },
+    },
+  });
+
+  try {
+    const res = await docClient.send(command);
+
+    return res.Items?.map((item) => {
+      return {
+        name: item.sk.S?.replace("HUNT#", ""),
+        position: { lat: item.position.M?.lat.N, lng: item.position.M?.lng.N },
+      };
+    });
+  } catch (e) {
+    return null;
+  }
+};
+
 const getMarkers = async (hunt: Hunts): Promise<HuntMarker[] | null> => {
   const huntString = `HUNT#${hunt}`;
   const command = new QueryCommand({
@@ -54,6 +98,24 @@ const getMarkers = async (hunt: Hunts): Promise<HuntMarker[] | null> => {
     return res.Items as HuntMarker[];
   } catch (e) {
     console.error("there was an error fetching the markers for the hunt");
+    return null;
+  }
+};
+
+const addHunt = async (hunt: { name: string; position: google.maps.LatLngLiteral; markerPath: string }) => {
+  const command = new PutCommand({
+    TableName: table,
+    Item: {
+      pk: `HUNT#${hunt.name}`,
+      sk: `HUNT#${hunt.name}`,
+      position: hunt.position,
+      markerPath: hunt.markerPath,
+    },
+  });
+  try {
+    await docClient.send(command);
+    return { success: true };
+  } catch (e) {
     return null;
   }
 };
@@ -155,6 +217,9 @@ const getHuntersCollected = (hunt: Hunts, hunter: string) => {
 
 export default {
   getMarkers,
+  getHunts,
+  getHunt,
+  addHunt,
   addMarker,
   checkMarker,
   getActiveHunt,

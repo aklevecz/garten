@@ -3,27 +3,26 @@
   import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import GoogleMaps from "$components/GoogleMaps.svelte";
+  import LoadingSpinner from "$components/LoadingSpinner.svelte";
   import Egg from "$components/modals/Egg.svelte";
-  import Login from "$components/modals/Login.svelte";
-  import EggIcon from "$components/svg/Egg.svelte";
+  import Info from "$components/modals/Info.svelte";
+  import ParkLogin from "$components/modals/ParkLogin.svelte";
   import In from "$components/svg/In.svelte";
   import Locate from "$components/svg/Locate.svelte";
   import Out from "$components/svg/Out.svelte";
-  import { getHunterFoundCount } from "$lib/markerUtils";
+  import local from "$lib/local";
   import mapStore, { loadingLocation } from "$stores/map";
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
-  import LoadingSpinner from "$components/LoadingSpinner.svelte";
-  import local from "$lib/local";
-  import Info from "$components/modals/Info.svelte";
   export let data: PageData;
 
   let mapLoaded = false;
   let showModal = false;
 
   function initHunt() {
-    const { markers } = data;
-    mapStore.setMarkers(markers);
+    const { hunt, markers } = data;
+    mapStore.setMarkers(markers, hunt.markerPath);
+    mapStore.initHunt(hunt);
   }
 
   $: {
@@ -66,7 +65,7 @@
   <!-- {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()} -->
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
-      <button disabled={true} formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
+      <button disabled={false} formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
     </form>{/if}
   {#if !$page.data.hunter}identify<button
       class="small"
@@ -76,15 +75,16 @@
     >{/if}
 </div>
 
+<!-- EGG COLLECTED NUMBER
 <div class="collected-container">
   <div class="collected-wrapper">
     <div class="egg-wrapper"><EggIcon /></div>
     <div class="num-wrapper">{getHunterFoundCount($page.data.markers, $page.data.hunter)}</div>
   </div>
-</div>
+</div> -->
 
-<Login bind:showModal />
-<Egg />
+<ParkLogin bind:showModal />
+<Egg hunt={data.hunt} />
 <GoogleMaps
   globally
   on:load={(e) => {
@@ -164,10 +164,12 @@
     right: 10px;
     bottom: 10px;
     z-index: 9;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background: rgb(255, 0, 162);
+    background: black;
     border-radius: 50%;
     border: 10px solid white;
+    border: none;
   }
 </style>

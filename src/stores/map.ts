@@ -1,6 +1,6 @@
 import { mapCenters } from "$lib/constants";
 import mapUtils from "$lib/mapUtils";
-import type { HuntMarker } from "$lib/types";
+import type { Hunt, HuntMarker } from "$lib/types";
 import { get, writable } from "svelte/store";
 import { eggModal } from "./modal";
 import userStore from "./user";
@@ -42,7 +42,11 @@ function createStore() {
     setMap: (map: google.maps.Map) => {
       update((m) => ({ ...m, map }));
     },
-    setMarkers: (markers: HuntMarker[]) => {
+    initHunt: (hunt: Hunt) => {
+      const mapState = get(mapStore);
+      mapState.map?.setCenter(hunt.position);
+    },
+    setMarkers: (markers: HuntMarker[], iconUrl: string) => {
       const mapState = get(mapStore);
       const newMarkers = markers.map((marker) => {
         const mark = new google.maps.Marker({
@@ -52,12 +56,12 @@ function createStore() {
           // icon: mapUtils.svgMarker(),
           icon: {
             // url: `data:image/svg+xml;base64,${svg}`,
-            url:
-              marker.found && marker.finder === get(userStore).hunter
-                ? "/egg-broken-smoll-map-icon-yours.svg"
-                : marker.found
-                ? "/egg-broken-smoll-map-icon-others.svg"
-                : "/egg-smoll-map-icon.svg",
+            url: "/" + iconUrl,
+            // marker.found && marker.finder === get(userStore).hunter
+            //   ? "/egg-broken-smoll-map-icon-yours.svg"
+            //   : marker.found
+            //   ? "/egg-broken-smoll-map-icon-others.svg"
+            //   : "/egg-smoll-map-icon.svg",
             scaledSize: new google.maps.Size(45, 45),
           },
         });

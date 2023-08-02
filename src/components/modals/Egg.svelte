@@ -6,24 +6,28 @@
   import { eggModal } from "$stores/modal";
 
   const config: { [key in Hunts | string]: any } = {
-    "fwb-fest": { message: "find the bench :)" },
+    "fwb-fest": { message: "find the bench :)", buttonIcon: "/noggles.svg" },
     "bao-eggs": { message: "waiting to be cracked..." },
   };
 
   export let hunt: Hunt;
-  console.log(hunt);
+
+  let eigthWallURL = "";
+  $: {
+    const data = $eggModal.data;
+    eigthWallURL = `https://ar.thepark.wtf/?poster=${data.title}`;
+  }
 </script>
 
 <Modal bind:showModal={$eggModal.showModal}>
   <div class="h2">{$eggModal.data?.title}</div>
-  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div
-      style="letter-spacing:3px;"
-    >
+  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div style="letter-spacing:3px;">
       {config[hunt.name].message}
     </div>{/if}
   {#if hunt.name === "bao-eggs"}
     {#if $eggModal.data.found} <EggCracked />{:else}<Egg />{/if}{/if}
   <object title="modal-graphic" data="/park-bench-black.svg" />
+  <a href={eigthWallURL}><object title="button-icon" data={config[hunt.name].buttonIcon} /></a>
 </Modal>
 
 <style>
@@ -38,5 +42,18 @@
   }
   .is-cracker {
     color: var(--green);
+  }
+  object {
+    height: 100%;
+  }
+  a {
+    width: 80px;
+    height: 50px;
+    margin: auto;
+    display: block;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
   }
 </style>

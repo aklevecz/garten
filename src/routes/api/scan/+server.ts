@@ -2,9 +2,9 @@ import db from "$lib/db";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
-export const POST: RequestHandler = async ({ request, locals }) => {
-  const data = await request.json();
-  const { email, markerName } = data;
+export const GET: RequestHandler = async ({ url, locals }) => {
+  const email = url.searchParams.get("email") ?? "";
+  const markerName = url.searchParams.get("markerName") ?? "";
   const res = await db.addScan(email, locals.ip, markerName);
   if (res?.success) {
     return json(

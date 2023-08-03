@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { modalKeys } from "$lib/constants";
   import { eggModal } from "$stores/modal";
-  import { getContext } from "svelte";
-  import type { Writable } from "svelte/store";
 
   export let showModal: boolean; // boolean
 
@@ -12,7 +9,10 @@
     if (!showModal && dialog) {
       dialog.close();
       showModal = false;
-      eggModal.set({ showModal: false, data: { title: "", found: false, finder: "" } });
+      eggModal.set({
+        showModal: false,
+        data: { title: "", found: false, finder: "", isCracker: false, customMarker: null },
+      });
     }
   }
 </script>

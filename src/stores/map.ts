@@ -48,6 +48,7 @@ function createStore() {
     },
     setMarkers: (markers: HuntMarker[], iconUrl: string) => {
       const mapState = get(mapStore);
+      const scalar = 3;
       const newMarkers = markers.map((marker) => {
         const mark = new google.maps.Marker({
           position: marker.position,
@@ -56,13 +57,13 @@ function createStore() {
           // icon: mapUtils.svgMarker(),
           icon: {
             // url: `data:image/svg+xml;base64,${svg}`,
-            url: "/" + iconUrl,
+            url: marker.customMarker || "/" + iconUrl,
             // marker.found && marker.finder === get(userStore).hunter
             //   ? "/egg-broken-smoll-map-icon-yours.svg"
             //   : marker.found
             //   ? "/egg-broken-smoll-map-icon-others.svg"
             //   : "/egg-smoll-map-icon.svg",
-            scaledSize: new google.maps.Size(45, 45),
+            scaledSize: new google.maps.Size(11 * scalar, 17 * scalar),
           },
         });
         mark.addListener("click", () => {
@@ -74,6 +75,7 @@ function createStore() {
               found: marker.found || false,
               finder: marker.finder || "",
               isCracker: marker.isCracker || false,
+              customMarker: marker.customMarker || null,
             },
           });
         });

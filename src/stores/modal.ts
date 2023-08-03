@@ -7,5 +7,7 @@ export const eggModal: EggModal = writable({
     title: "EGG",
     found: false,
     finder: "",
+    isCracker: false,
+    customMarker: null,
   },
 });

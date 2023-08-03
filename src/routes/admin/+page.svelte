@@ -140,6 +140,7 @@
       <input placeholder="name" name="name" />
       <input placeholder="hunt" name="hunt" value={data.hunt} />
       <input placeholder="code" name="code" />
+      <input placeholder="custom-marker" name="custom-marker" />
       <input placeholder="lat" name="lat" bind:value={position.lat} />
       <input placeholder="lng" name="lng" bind:value={position.lng} />
       <div><button>create</button></div>

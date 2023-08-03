@@ -11,6 +11,7 @@ export type HuntMarker = {
   hunt: Hunts;
   position: google.maps.LatLngLiteral;
   code: string;
+  customMarker?: string;
   found?: boolean;
   finder?: string;
   isCracker?: boolean;
@@ -23,5 +24,6 @@ export type EggModal = Writable<{
     found: boolean;
     finder: string;
     isCracker: boolean;
+    customMarker: string | null;
   };
 }>;

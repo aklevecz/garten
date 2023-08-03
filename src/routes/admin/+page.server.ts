@@ -19,12 +19,14 @@ export const actions = {
     const data = await request.formData();
     const name = data.get("name") as string;
     const code = data.get("code") as string;
+    const customMarker = data.get("custom-marker") as string;
     const hunt = data.get("hunt") as Hunts;
     const lat = data.get("lat") as string;
     const lng = data.get("lng") as string;
     const res = await db.addMarker({
       name: cleanString(name),
       code: cleanString(code),
+      customMarker: cleanString(customMarker),
       hunt: cleanString(hunt) as Hunts,
       position: { lat: parseFloat(lat), lng: parseFloat(lng) },
     });

@@ -22,8 +22,8 @@ const hunts: { [hunt in Hunts]: any } = {
     name: "fwb-fest",
     center: mapCenters.laColombe,
   },
-  "fwb-flower": {
-    name: "fwb-flower",
+  "bao-eggs": {
+    name: "bao-eggs",
     center: mapCenters.fwbFest,
   },
 };
@@ -122,6 +122,7 @@ const addHunt = async (hunt: { name: string; position: google.maps.LatLngLiteral
 
 const addMarker = async (marker: HuntMarker) => {
   // markers.push(marker);
+  console.log(marker);
   const command = new PutCommand({
     TableName: table,
     Item: {

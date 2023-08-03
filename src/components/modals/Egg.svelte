@@ -2,11 +2,11 @@
   import Modal from "$components/Modal.svelte";
   import Egg from "$components/svg/Egg.svelte";
   import EggCracked from "$components/svg/EggCracked.svelte";
-  import type { Hunt, Hunts } from "$lib/types";
+  import type { EggModal, Hunt, Hunts } from "$lib/types";
   import { eggModal } from "$stores/modal";
 
   const config: { [key in Hunts | string]: any } = {
-    "fwb-fest": { message: "find the bench :)", buttonIcon: "/noggles.svg" },
+    "fwb-fest": { message: "tap the poster to see it move", buttonIcon: "/noggles.svg" },
     "bao-eggs": { message: "waiting to be cracked..." },
   };
 
@@ -21,12 +21,17 @@
 
 <Modal bind:showModal={$eggModal.showModal}>
   <div class="h2">{$eggModal.data?.title}</div>
-  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div style="letter-spacing:3px;">
+  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div
+      style="letter-spacing:3px;"
+    >
       {config[hunt.name].message}
     </div>{/if}
   {#if hunt.name === "bao-eggs"}
     {#if $eggModal.data.found} <EggCracked />{:else}<Egg />{/if}{/if}
-  <object title="modal-graphic" data="/park-bench-black.svg" />
+  {#if $eggModal.data?.customMarker && $eggModal.data?.customMarker.includes("svg")}<object
+      title="modal-graphic"
+      data={$eggModal.data?.customMarker}
+    />{:else}<img alt="oops" src={$eggModal.data?.customMarker} />{/if}
   <a href={eigthWallURL}><object title="button-icon" data={config[hunt.name].buttonIcon} /></a>
 </Modal>
 
@@ -55,5 +60,9 @@
     display: flex;
     justify-content: center;
     border-radius: 20px;
+  }
+  img {
+    width: 100%;
+    padding: 12px;
   }
 </style>

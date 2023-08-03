@@ -143,7 +143,7 @@ const addScan = async (email: string, ip: string, markerName: string) => {
   const command = new PutCommand({
     TableName: table,
     Item: {
-      pk: "HUNT#fwb-hunt",
+      pk: `EMAIL#${email}`,
       sk: `MARKER#${markerName}`,
       email,
       ip,

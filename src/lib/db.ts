@@ -139,6 +139,24 @@ const addMarker = async (marker: HuntMarker) => {
   }
 };
 
+const addScan = async (email: string, ip: string, markerName: string) => {
+  const command = new PutCommand({
+    TableName: table,
+    Item: {
+      pk: "HUNT#fwb-hunt",
+      sk: `MARKER#${markerName}`,
+      email,
+      ip,
+    },
+  });
+  try {
+    await docClient.send(command);
+    return { success: true };
+  } catch (e) {
+    return null;
+  }
+};
+
 const checkMarker = (name: string) => markers.find((m) => m.name === name)?.found;
 
 const getMarkerByCode = async (code: string) => {
@@ -222,6 +240,7 @@ export default {
   getHunt,
   addHunt,
   addMarker,
+  addScan,
   checkMarker,
   getActiveHunt,
   getMarkerByCode,

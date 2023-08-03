@@ -7,7 +7,14 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async () => {
-  return json({ markers: await db.getMarkers("fwb-fest") });
+  return json(
+    { markers: await db.getMarkers("fwb-fest") },
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
 };
 
 // your first egg becomes your username/userid

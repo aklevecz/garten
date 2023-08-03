@@ -6,7 +6,7 @@
   import { eggModal } from "$stores/modal";
 
   const config: { [key in Hunts | string]: any } = {
-    "fwb-fest": { message: "tap the poster to see it move", buttonIcon: "/noggles.svg" },
+    "fwb-fest": { message: "hf", buttonIcon: "/noggles.svg" },
     "bao-eggs": { message: "waiting to be cracked..." },
   };
 
@@ -15,7 +15,8 @@
   let eigthWallURL = "";
   $: {
     const data = $eggModal.data;
-    eigthWallURL = `https://ar.thepark.wtf/?poster=${data.title}`;
+    eigthWallURL = `https://park.yaytso.art/?poster=${data.title}`;
+    console.log(eigthWallURL);
   }
 </script>
 
@@ -32,7 +33,11 @@
       title="modal-graphic"
       data={$eggModal.data?.customMarker}
     />{:else}<img alt="oops" src={$eggModal.data?.customMarker} />{/if}
-  <a href={eigthWallURL}><object title="button-icon" data={config[hunt.name].buttonIcon} /></a>
+  <button
+    on:click={() => {
+      window.open(eigthWallURL);
+    }}><object title="button-icon" data={config[hunt.name].buttonIcon} /></button
+  >
 </Modal>
 
 <style>
@@ -51,7 +56,7 @@
   object {
     height: 100%;
   }
-  a {
+  button {
     width: 80px;
     height: 50px;
     margin: auto;
@@ -60,6 +65,7 @@
     display: flex;
     justify-content: center;
     border-radius: 20px;
+    border: none;
   }
   img {
     width: 100%;

@@ -24,7 +24,7 @@ export const GET: RequestHandler = async () => {
 
 // you have to come to the gallery to crack it
 
-export const POST = async ({ request, locals, cookies }) => {
+export const POST: RequestHandler = async ({ request, locals, cookies }) => {
   const data = await request.json();
   const { code } = data;
   let hunter = locals.hunter;

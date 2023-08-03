@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
   import Modal from "$components/Modal.svelte";
   import In from "$components/svg/In.svelte";
+  import local from "$lib/local";
 
   export let email: string = "";
   export let address: string = "";
@@ -11,6 +13,14 @@
     address = $page.data.address;
     if (address) {
       showModal = false;
+      if (browser) {
+        local().set("email", $page.data.email);
+        local().set("address", $page.data.address);
+      }
+    }
+    if (browser) {
+      email = local().get("email") || "";
+      address = local().get("address") || "";
     }
     showModal = showModal;
     address = address;

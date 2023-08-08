@@ -1,11 +1,12 @@
 import db from "$lib/db";
 import type { Hunts } from "$lib/types";
+import { cleanString } from "$lib/utils";
 import { error, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { cleanString } from "$lib/utils";
 
-export const load = (async () => {
-  const hunt = db.getActiveHunt().name;
+export const load = (async ({ url }) => {
+  const hunt = url.searchParams.get("hunt") || (db.getActiveHunt().name as any);
+  // const hunt = db.getActiveHunt().name;
   const markers = await db.getMarkers(hunt);
 
   if (!markers) {
@@ -34,6 +35,16 @@ export const actions = {
       return res;
     }
     throw error(400, "failed to add marker");
+  },
+  delete: async ({ request }) => {
+    const data = await request.formData();
+    const code = data.get("code") as string;
+    const huntName = data.get("hunt-name") as string;
+    const res = await db.deleteMarker(huntName, code);
+    if (res?.success) {
+      return res;
+    }
+    throw error(400, "failed to delete marker");
   },
   addHunt: async ({ request }) => {
     const data = await request.formData();

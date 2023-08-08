@@ -1,10 +1,8 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import GoogleMaps from "$components/GoogleMaps.svelte";
-  import Egg from "$components/svg/Egg.svelte";
   import Locate from "$components/svg/Locate.svelte";
   import mapUtils from "$lib/mapUtils";
-  import { redirect } from "@sveltejs/kit";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -132,7 +130,12 @@
           <div>{marker.name}</div>
           <div>{marker.hunt}</div>
           <div>{marker.code}</div>
-          <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button>
+          <!-- <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button> -->
+          <form method="POST" action="?/delete" use:enhance>
+            <input name="hunt-name" value={marker.hunt} style="display:none;" />
+            <input name="code" value={marker.code} style="display:none;" />
+            <button>delete</button>
+          </form>
         </div>
       {/each}
     </div>

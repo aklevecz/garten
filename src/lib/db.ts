@@ -3,7 +3,7 @@ import type { HuntMarker, Hunts } from "./types";
 
 import { AWS_S3_ACCESS_KEY, AWS_S3_SECRET_KEY } from "$env/static/private";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { cleanString } from "./utils";
 
 // Possible indexes
@@ -24,13 +24,13 @@ const hunts: { [hunt in Hunts]: any } = {
   },
   "bao-eggs": {
     name: "bao-eggs",
-    center: mapCenters.fwbFest,
+    center: mapCenters.laColombe,
   },
 };
 
 // @todo make more dynamic
-const getActiveHunt = () => {
-  return hunts["fwb-fest"];
+const getActiveHunt = (): { name: string; center: google.maps.LatLngLiteral } => {
+  return hunts["bao-eggs"];
 };
 
 const getHunt = async (huntName: string) => {
@@ -41,12 +41,13 @@ const getHunt = async (huntName: string) => {
       sk: `HUNT#${huntName}`,
     },
   });
-
+  console.log(JSON.stringify(command));
   try {
     const res = await docClient.send(command);
     const { pk, position, markerPath } = res.Item!;
     return { name: pk.replace("HUNT#", ""), position, markerPath };
   } catch (e) {
+    console.log("error getting hunt");
     return null;
   }
 };
@@ -121,16 +122,31 @@ const addHunt = async (hunt: { name: string; position: google.maps.LatLngLiteral
 };
 
 const addMarker = async (marker: HuntMarker) => {
-  // markers.push(marker);
-  console.log(marker);
   const command = new PutCommand({
     TableName: table,
     Item: {
-      pk: `HUNT#${getActiveHunt().name}`,
+      pk: `HUNT#${marker.hunt}`,
       sk: `MARKER#${marker.code}`,
       ...marker,
     },
   });
+  try {
+    await docClient.send(command);
+    return { success: true };
+  } catch (e) {
+    return null;
+  }
+};
+
+const deleteMarker = async (huntName: string, code: string) => {
+  const command = new DeleteCommand({
+    TableName: table,
+    Key: {
+      pk: `HUNT#${huntName}`,
+      sk: `MARKER#${code}`,
+    },
+  });
+  console.log(JSON.stringify(command));
   try {
     await docClient.send(command);
     return { success: true };
@@ -240,6 +256,7 @@ export default {
   getHunt,
   addHunt,
   addMarker,
+  deleteMarker,
   addScan,
   checkMarker,
   getActiveHunt,

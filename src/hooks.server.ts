@@ -1,7 +1,7 @@
-import { cookieKeys } from "$lib/constants";
-import type { Handle } from "@sveltejs/kit";
-import Iron from "@hapi/iron";
 import { SESSION_SECRET } from "$env/static/private";
+import { cookieKeys } from "$lib/constants";
+import Iron from "@hapi/iron";
+import type { Handle } from "@sveltejs/kit";
 export const handle = (async ({ event, resolve }) => {
   const cookie = event.cookies.get(cookieKeys.hunter) as string;
   const ip = event.getClientAddress();
@@ -17,7 +17,7 @@ export const handle = (async ({ event, resolve }) => {
     event.locals.email = email;
     event.locals.address = address;
   } catch (e) {
-    console.log(e);
+    console.log("error unseal");
     event.locals.hunter = "";
     event.locals.ip = "";
   }

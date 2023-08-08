@@ -1,19 +1,18 @@
 import { SESSION_SECRET } from "$env/static/private";
 import { cookieKeys, requestErrors } from "$lib/constants";
 import db from "$lib/db";
+import type { Hunt } from "$lib/types";
 import Iron from "@hapi/iron";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import type { Hunt } from "$lib/types";
 
 const HUNT_NAME = "fwb-fest";
 
 export const load = (async ({ cookies, locals }) => {
   // this could come from the cookie if hooks.server is not used
   const hunter = locals.hunter;
-  const hunt = (await db.getHunt(HUNT_NAME)) as Hunt;
-  const markers = await db.getMarkers(HUNT_NAME);
-
+  const hunt = (await db.getHunt(db.getActiveHunt().name)) as Hunt;
+  const markers = await db.getMarkers(hunt.name as any);
   if (!hunt) {
     throw error(404, "hunt not found");
   }

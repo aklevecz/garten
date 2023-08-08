@@ -21,6 +21,7 @@
 
   function initHunt() {
     const { hunt, markers } = data;
+    console.log(markers);
     mapStore.setMarkers(markers, hunt.markerPath);
     mapStore.initHunt(hunt);
   }

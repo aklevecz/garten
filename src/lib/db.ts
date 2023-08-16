@@ -1,9 +1,16 @@
 import { mapCenters } from "$lib/constants";
-import type { HuntMarker, Hunts } from "./types";
+import type { Hunt, HuntMarker, Hunts } from "./types";
 
 import { AWS_S3_ACCESS_KEY, AWS_S3_SECRET_KEY } from "$env/static/private";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DeleteCommand,
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { cleanString } from "./utils";
 
 // Possible indexes
@@ -28,6 +35,25 @@ const hunts: { [hunt in Hunts]: any } = {
   },
 };
 
+const getHunterInfo = async (hunter: string) => {
+  const command = new GetCommand({
+    TableName: table,
+    Key: {
+      pk: `HUNTER#${hunter}`,
+      sk: `HUNTER#${hunter}`,
+    },
+  });
+
+  try {
+    const res = await docClient.send(command);
+    const { info } = res.Item!;
+    return info;
+  } catch (e) {
+    console.log("error getting hunt");
+    return null;
+  }
+};
+
 // @todo make more dynamic
 const getActiveHunt = (): { name: string; center: google.maps.LatLngLiteral } => {
   return hunts["bao-eggs"];
@@ -41,7 +67,6 @@ const getHunt = async (huntName: string) => {
       sk: `HUNT#${huntName}`,
     },
   });
-  console.log(JSON.stringify(command));
   try {
     const res = await docClient.send(command);
     const { pk, position, markerPath } = res.Item!;
@@ -138,6 +163,38 @@ const addMarker = async (marker: HuntMarker) => {
   }
 };
 
+const updateMarker = async (marker: HuntMarker) => {
+  const command = new UpdateCommand({
+    TableName: table,
+    Key: {
+      pk: `HUNT#${marker.hunt}`,
+      sk: `MARKER#${marker.code}`,
+    },
+    UpdateExpression: `SET #name = :name, #hunt = :hunt, #position = :position, #code = :code, #customMarker = :customMarker`,
+    ExpressionAttributeNames: {
+      "#name": "name",
+      "#hunt": "hunt",
+      "#position": "position",
+      "#code": "code",
+      "#customMarker": "customMarker",
+    },
+    ExpressionAttributeValues: {
+      ":name": marker.name,
+      ":hunt": marker.hunt,
+      ":position": marker.position,
+      ":code": marker.code,
+      ":customMarker": marker.customMarker,
+    },
+  });
+
+  try {
+    await docClient.send(command);
+    return { success: true };
+  } catch (e) {
+    return null;
+  }
+};
+
 const deleteMarker = async (huntName: string, code: string) => {
   const command = new DeleteCommand({
     TableName: table,
@@ -146,7 +203,6 @@ const deleteMarker = async (huntName: string, code: string) => {
       sk: `MARKER#${code}`,
     },
   });
-  console.log(JSON.stringify(command));
   try {
     await docClient.send(command);
     return { success: true };
@@ -229,7 +285,7 @@ const saveUserIP = async (hunter: string, ip: string) => {
   const command = new PutCommand({
     TableName: table,
     Item: {
-      pk: `USER#${hunter}`,
+      pk: `HUNTER#${hunter}`,
       sk: `IP#${ip}`,
     },
   });
@@ -244,6 +300,26 @@ const saveUserIP = async (hunter: string, ip: string) => {
   }
 };
 
+const rsvp = async (hunter: string, info: string) => {
+  const command = new PutCommand({
+    TableName: table,
+    Item: {
+      pk: `HUNTER#${hunter}`,
+
+      sk: `HUNTER#${hunter}`,
+      info,
+    },
+  });
+  try {
+    await docClient.send(command);
+
+    return { success: true };
+  } catch (e) {
+    console.error("error while saving rsvp", e);
+    return null;
+  }
+};
+
 // deprecated?
 const getHuntersCollected = (hunt: Hunts, hunter: string) => {
   const huntedMarkers = markers.filter((marker) => marker.hunt === hunt && marker.finder === hunter);
@@ -251,11 +327,13 @@ const getHuntersCollected = (hunt: Hunts, hunter: string) => {
 };
 
 export default {
+  getHunterInfo,
   getMarkers,
   getHunts,
   getHunt,
   addHunt,
   addMarker,
+  updateMarker,
   deleteMarker,
   addScan,
   checkMarker,
@@ -264,6 +342,7 @@ export default {
   claimMarker,
   getHuntersCollected,
   saveUserIP,
+  rsvp,
 };
 
 // DEPRECATED

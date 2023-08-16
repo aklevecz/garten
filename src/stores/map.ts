@@ -57,12 +57,13 @@ function createStore() {
           // icon: mapUtils.svgMarker(),
           icon: {
             // url: `data:image/svg+xml;base64,${svg}`,
-            url: marker.customMarker || "/" + iconUrl,
-            // marker.found && marker.finder === get(userStore).hunter
-            //   ? "/egg-broken-smoll-map-icon-yours.svg"
-            //   : marker.found
-            //   ? "/egg-broken-smoll-map-icon-others.svg"
-            //   : "/egg-smoll-map-icon.svg",
+            url:
+              //  marker.customMarker || "/" + iconUrl,
+              marker.found && marker.finder === get(userStore).hunter
+                ? "/egg-broken-smoll-map-icon-yours.svg"
+                : marker.found
+                ? "/egg-broken-smoll-map-icon-others.svg"
+                : "/egg-smoll-map-icon.svg",
             scaledSize: new google.maps.Size(11 * scalar, 17 * scalar),
           },
         });

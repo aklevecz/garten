@@ -6,12 +6,11 @@ import Iron from "@hapi/iron";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-const HUNT_NAME = "fwb-fest";
-
-export const load = (async ({ cookies, locals }) => {
-  // this could come from the cookie if hooks.server is not used
+export const load = (async ({ locals }) => {
   const hunter = locals.hunter;
+  // cache
   const hunt = (await db.getHunt(db.getActiveHunt().name)) as Hunt;
+  // could invalidate this endpoint if moved to api
   const markers = await db.getMarkers(hunt.name as any);
   if (!hunt) {
     throw error(404, "hunt not found");
@@ -21,7 +20,7 @@ export const load = (async ({ cookies, locals }) => {
     throw error(404, "markers not found");
   }
 
-  console.log("+page.server.ts load :", locals.hunter, hunt);
+  console.log("+page.server.ts:", locals.hunter, hunt);
   return {
     markers: markers.map((m) => ({ ...m, isCracker: m.finder === hunter })),
     hunter,

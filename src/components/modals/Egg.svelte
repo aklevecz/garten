@@ -22,7 +22,9 @@
 
 <Modal bind:showModal={$eggModal.showModal}>
   <div class="h2">{$eggModal.data?.title}</div>
-  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div style="letter-spacing:3px;">
+  {#if $eggModal.data.found}<div class:is-cracker={$eggModal.data.isCracker} class="cracked">cracked</div>{:else}<div
+      style="letter-spacing:3px;"
+    >
       {config[hunt.name].message}
     </div>{/if}
   {#if hunt.name === "bao-eggs"}
@@ -33,11 +35,11 @@
     />{:else if $eggModal.data?.customMarker}<img alt="oops" src={$eggModal.data?.customMarker} />{:else}
     <Egg />
   {/if}
-  <button
+  <!-- <button
     on:click={() => {
       window.open(eigthWallURL);
     }}><object title="button-icon" data={config[hunt.name].buttonIcon} /></button
-  >
+  > -->
 </Modal>
 
 <style>
@@ -48,7 +50,7 @@
     text-transform: uppercase;
     font-size: 2rem;
     font-weight: bold;
-    color: red;
+    color: var(--red);
   }
   .is-cracker {
     color: var(--green);

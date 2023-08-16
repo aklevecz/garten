@@ -11,8 +11,10 @@ export const handle = (async ({ event, resolve }) => {
     return resolve(event);
   }
   try {
-    const { hunter, email, address } = await Iron.unseal(cookie, SESSION_SECRET, Iron.defaults);
+    const { hunter, info, email, address } = await Iron.unseal(cookie, SESSION_SECRET, Iron.defaults);
+    console.log("hooks.server.ts, info:", info);
     console.log("hooks.server.ts, hunter:", hunter, ip);
+    event.locals.info = info;
     event.locals.hunter = hunter;
     event.locals.email = email;
     event.locals.address = address;

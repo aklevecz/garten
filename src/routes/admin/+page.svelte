@@ -112,6 +112,7 @@
     eggImg.src = "http://localhost:5173/egg-qr-template.png";
   };
   let showForm = true;
+  $: markers = data.markers;
 </script>
 
 <div class="container">
@@ -124,22 +125,45 @@
         <div>name</div>
         <div>hunt</div>
         <div>code</div>
+        <div>lat</div>
+        <div>lng</div>
+        <div>custom marker</div>
       </div>
-      {#each data.markers as marker}
-        <div class="marker-wrapper">
-          <div>{marker.name}</div>
-          <div>{marker.hunt}</div>
-          <div>{marker.code}</div>
-          <!-- <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button> -->
-          <form method="POST" action="?/delete" use:enhance>
-            <input name="hunt-name" value={marker.hunt} style="display:none;" />
-            <input name="code" value={marker.code} style="display:none;" />
-            <button>delete</button>
-          </form>
-        </div>
+      {#each markers as marker}
+        <form
+          method="POST"
+          action="?/update"
+          use:enhance={() => {
+            return async ({ update }) => {
+              await update({ reset: false });
+              // Redo the assignment from the script above
+              markers = data.markers;
+            };
+          }}
+        >
+          <div class="marker-wrapper">
+            <!-- <div>{marker.name}</div> -->
+            <input name="name" value={marker.name} />
+            <input name="hunt" value={marker.hunt} />
+            <input name="code" value={marker.code} />
+            <input name="lat" value={marker.position.lat} />
+            <input name="lng" value={marker.position.lng} />
+            <input name="custom-marker" value={marker.customMarker} />
+            <div>{JSON.stringify(marker)}</div>
+            <!-- <div>{marker.hunt}</div> -->
+            <!-- <div>{marker.code}</div> -->
+            <!-- <button on:click={() => onQR(`https://garten-six.vercel.app/find/${marker.code}`)}>qr</button> -->
+            <!-- <input name="hunt-name" value={marker.hunt} style="display:none;" /> -->
+            <!-- <input name="code" value={marker.code} style="display:none;" /> -->
+            <div>
+              <button>update</button>
+              <button formaction="admin/?/delete">delete</button>
+            </div>
+          </div>
+        </form>
       {/each}
     </div>
-    <form method="POST" action="?/add" use:enhance>
+    <form class="form-col" method="POST" action="?/add" use:enhance>
       <input placeholder="name" name="name" />
       <input placeholder="hunt" name="hunt" value={data.hunt} />
       <input placeholder="code" name="code" />
@@ -148,7 +172,7 @@
       <input placeholder="lng" name="lng" bind:value={position.lng} />
       <div><button>create</button></div>
     </form>
-    <form method="POST" action="?/addHunt" use:enhance>
+    <form class="form-col" method="POST" action="?/addHunt" use:enhance>
       <input placeholder="name" name="name" />
       <input placeholder="marker path" name="marker-path" />
       <input placeholder="lat" name="lat" bind:value={position.lat} />
@@ -208,7 +232,7 @@
   .marker-wrapper.heading {
     background-color: red;
   }
-  form {
+  .form-col {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -217,7 +241,7 @@
     margin: 10px auto;
     padding: 8px;
   }
-  form > input {
+  .form-col > input {
     width: 200px;
   }
   .map-container {

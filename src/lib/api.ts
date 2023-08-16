@@ -1,13 +1,12 @@
-import type { HuntMarker } from "./types";
-
 const endpoints = {
-  markers: "/api/markers",
+  claim: "/api/claim",
+  rsvp: "/api/rsvp",
 };
 
-const getMarkers = (): Promise<{ markers: HuntMarker[] }> => fetch(endpoints.markers).then((r) => r.json());
+type Endpoint = keyof typeof endpoints;
 
-const findMarker = async (code: string) => {
-  const res = await fetch(endpoints.markers, { method: "POST", body: JSON.stringify({ code }) });
+const fetcher = async (endpoint: Endpoint, method: "POST" | "GET", params: any) => {
+  const res = await fetch(endpoints[endpoint], { method, body: JSON.stringify({ ...params }) });
   const data = await res.json();
   if (res.status !== 200) {
     throw Error(data.message);
@@ -15,4 +14,8 @@ const findMarker = async (code: string) => {
   return data;
 };
 
-export default { getMarkers, findMarker };
+const claimEgg = async (code: string, name: string) => fetcher("claim", "POST", { code, name });
+
+const rsvp = async (info: string) => fetcher("rsvp", "POST", { info });
+
+export default { claimEgg, rsvp };

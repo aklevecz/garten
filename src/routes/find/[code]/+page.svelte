@@ -1,85 +1,106 @@
 <script lang="ts">
   import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
-  import Login from "$components/modals/Login.svelte";
+  import Info from "$components/modals/Info.svelte";
   import Egg from "$components/svg/Egg.svelte";
-  import EggCracked from "$components/svg/EggCracked.svelte";
   import api from "$lib/api";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
   $: cracked = $page.data.marker.finder && $page.data.marker.found;
   $: isAuthed = Boolean(data.hunter);
   $: markerName = data.marker.name;
-  $: finder = $page.data.hunter || "CRACKABLE";
+  $: buttonText = isAuthed && cracked ? "ACTIVATED" : cracked ? "LOGIN" : "ACTIVATE";
+  $: isCracker = $page.data.isCracker;
+  $: markerFound = isCracker ? "ACTIVATED" : cracked ? "ACTIVATED" : "INACTIVE";
 
-  $: buttonText = cracked ? "CRACKED" : "CRACK";
-
-  $: wasCracker = data.marker.finder === $page.data.hunter;
-
-  $: markerFound = wasCracker ? "YOU GOT IT :)" : cracked ? "TOO LATE :(" : "CLAIMABLE";
+  $: info = $page.data.info;
   let error = "";
 
-  let showModal = !isAuthed;
-  showModal = false;
-  function toggleModal() {
-    showModal = !showModal;
-  }
-</script>
-
-<Login bind:showModal />
-<div class="list-container">
-  <div>
-    <div class="label">egg_name</div>
-    <div class="marker-name">{markerName}</div>
-  </div>
-  <div>
-    <div class="label">status</div>
-    <div class:was-cracked={wasCracker} class="marker-found">{markerFound}</div>
-  </div>
-</div>
-<div class="error">{error}</div>
-
-{#if cracked}
-  <EggCracked />
-{:else}
-  <Egg />
-{/if}
-<button
-  disabled={cracked}
-  class="big bottom-black-yellow"
-  on:click={() => {
+  function onActivate() {
     api
-      .findMarker(data.code)
+      .claimEgg(data.code, data.marker.name)
       .then(() => {
         invalidateAll();
       })
       .catch((err) => {
         error = err;
-        // toggleModal();
       });
-  }}>{buttonText}</button
->
+  }
+
+  let showModal = false;
+  function toggleModal() {
+    showModal = true;
+  }
+</script>
+
+<Info bind:showModal />
+<div class="container">
+  <div class="info-container">
+    <div>
+      <div class="label">egg_name</div>
+      <div class="marker-name">{markerName}</div>
+    </div>
+    <div>
+      <div class="label">status</div>
+      <div class:was-cracked={isCracker} class="marker-found">{markerFound}</div>
+    </div>
+  </div>
+  <div class:hide={!error} class="error">{error}</div>
+  {#if isCracker}
+    <div style="font-size:2rem;text-align:center;">
+      <div>this is your egg</div>
+      <div>to be hatched</div>
+    </div>
+  {/if}
+  <div class="egg-wrapper"><Egg style="position:absolute;" /></div>
+  {#if isAuthed && !info}<button class="rsvp-button" on:click={toggleModal}>RSVP</button>{/if}
+  {#if info}<button class="big bottom-black-yellow black-white" on:click={toggleModal}>YOU ARE RSVP'D</button>{/if}
+  {#if !isAuthed}<button disabled={isAuthed && cracked} on:click={onActivate}>{buttonText}</button>{/if}
+</div>
+
+<!-- {#if cracked}
+  <EggCracked />
+  <div class="faded"><Egg style="max-height:50vh;" /></div>
+{:else}
+  <Egg />
+{/if}
+<button disabled={cracked} class="big bottom-black-yellow" on:click={onFind}>{buttonText}</button> -->
 
 <style>
-  .list-container {
+  .container {
     text-transform: uppercase;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    /* gap: 20px; */
     flex: 1 0 auto;
-    padding: 10px;
+    justify-content: space-between;
   }
-  .list-container > div {
+  .container > div {
     font-weight: bold;
     font-size: 2rem;
+    padding: 10px;
+  }
+  .info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   .bottom-black-yellow {
     color: yellow;
     background-color: red;
     border: none;
     padding: 10px 0px;
+  }
+  .black-white {
+    background-color: black;
+    color: white;
+  }
+  .rsvp-button {
+    font-size: 2rem;
+    padding: 10px 0px;
+    border-radius: 50px;
+    margin: 0px 40px 12px;
   }
   button {
     border-radius: 0px;
@@ -97,5 +118,18 @@
   .error {
     color: red;
     text-align: center;
+  }
+  .faded {
+    opacity: 0.1;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  .egg-wrapper {
+    position: relative;
+    flex: 0 0 30%;
+    width: 100%;
+    padding: 0px !important;
+    margin: 20px auto;
   }
 </style>

@@ -21,7 +21,7 @@
 
   function initHunt() {
     const { hunt, markers } = data;
-    console.log(markers);
+    console.log("+page.svelte: ", markers);
     mapStore.setMarkers(markers, hunt.markerPath);
     mapStore.initHunt(hunt);
   }
@@ -62,18 +62,19 @@
 <svelte:window on:blur={onBlur} on:focus={onBlur} on:visibilitychange={onBlur} />
 <Info bind:showModal={showInfoModal} />
 <div class="user-bar">
-  {$page.data.hunter.slice(0, 10)}
+  {$page.data.hunter && $page.data.hunter.slice(0, 10)}
   <!-- {$mapStore.userMarker?.getPosition()?.lat()}, {$mapStore.userMarker?.getPosition()?.lng()} -->
   <!-- <div>{$page.data.hunter || "signin"}</div> -->
   {#if $page.data.hunter}<form method="POST" use:enhance>
       <button disabled={false} formaction="/?/logout" class="small"> <div class="icon-wrapper"><Out /></div></button>
     </form>{/if}
-  {#if !$page.data.hunter}identify<button
+  {#if !$page.data.hunter}<div class="cta">find an egg!</div>
+    <!-- <button
       class="small"
       on:click={() => {
         showModal = true;
-      }}><In /></button
-    >{/if}
+      }}><In /></button> -->
+  {/if}
 </div>
 
 <!-- EGG COLLECTED NUMBER
@@ -172,5 +173,8 @@
     border-radius: 50%;
     border: 10px solid white;
     border: none;
+  }
+  .cta {
+    padding: 5px;
   }
 </style>

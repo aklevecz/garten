@@ -3,10 +3,8 @@
   import { page } from "$app/stores";
   import userStore from "$stores/user";
 
-  // import type { LayoutData } from "./$types";
-  // export let data: LayoutData;
   $: {
-    // console.log("+layout.svelte, $page.data:", $page.data);
+    console.log("+layout.svelte, $page.data:", $page.data);
     if ($page.data.hunter) {
       userStore.init($page.data.hunter);
     } else {
@@ -20,6 +18,7 @@
 <style>
   :root {
     --green: #84ff00;
+    --red: #ff5656;
     /* --green: red;0 */
   }
   :global(*) {
@@ -56,5 +55,8 @@
   :global(button.small) {
     width: 50px;
     height: 50px;
+  }
+  :global(.hide) {
+    display: none;
   }
 </style>

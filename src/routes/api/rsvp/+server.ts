@@ -9,10 +9,10 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
     throw error(401);
   }
   const data = await request.json();
-  const { info } = data;
-  const res = await db.rsvp(locals.hunter, info);
+  const { info, favoriteArtist } = data;
+  const res = await db.rsvp(locals.hunter, info, favoriteArtist);
   if (res?.success) {
-    const sealed = await Iron.seal({ hunter: locals.hunter, info }, SESSION_SECRET, Iron.defaults);
+    const sealed = await Iron.seal({ hunter: locals.hunter, info, favoriteArtist }, SESSION_SECRET, Iron.defaults);
     cookies.set(cookieKeys.hunter, sealed, { path: "/", httpOnly: true, secure: true });
     return json({ success: true });
   }

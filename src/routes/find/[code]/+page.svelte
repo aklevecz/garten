@@ -10,11 +10,14 @@
   $: cracked = $page.data.marker.finder && $page.data.marker.found;
   $: isAuthed = Boolean(data.hunter);
   $: markerName = data.marker.name;
-  $: buttonText = isAuthed && cracked ? "ACTIVATED" : cracked ? "LOGIN" : "ACTIVATE";
+  $: buttonText = isAuthed && cracked ? "ACTIVATED" : cracked ? "STEAL" : "ACTIVATE";
   $: isCracker = $page.data.isCracker;
   $: markerFound = isCracker ? "ACTIVATED" : cracked ? "ACTIVATED" : "INACTIVE";
 
   $: info = $page.data.info;
+
+  $: notTheirMarker = !isCracker && isAuthed;
+
   let error = "";
 
   function onActivate() {
@@ -56,7 +59,10 @@
   <div class="egg-wrapper"><Egg style="position:absolute;" /></div>
   {#if isAuthed && !info}<button class="rsvp-button" on:click={toggleModal}>RSVP</button>{/if}
   {#if info}<button class="big bottom-black-yellow black-white" on:click={toggleModal}>YOU ARE RSVP'D</button>{/if}
-  {#if !isAuthed}<button disabled={isAuthed && cracked} on:click={onActivate}>{buttonText}</button>{/if}
+  {#if !isAuthed}<button class="big bottom-black-yellow" disabled={isAuthed && cracked} on:click={onActivate}
+      >{buttonText}</button
+    >{/if}
+  {#if notTheirMarker}<button on:click={onActivate} class="rsvp-button">STEAL</button>{/if}
 </div>
 
 <!-- {#if cracked}

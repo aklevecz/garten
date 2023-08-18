@@ -36,6 +36,7 @@ const hunts: { [hunt in Hunts]: any } = {
 };
 
 const getHunterInfo = async (hunter: string) => {
+  console.log(hunter);
   const command = new GetCommand({
     TableName: table,
     Key: {
@@ -46,9 +47,10 @@ const getHunterInfo = async (hunter: string) => {
 
   try {
     const res = await docClient.send(command);
-    const { info } = res.Item!;
-    return info;
+    const { info, favoriteArtist } = res.Item!;
+    return { info, favoriteArtist };
   } catch (e) {
+    console.log(e);
     console.log("error getting hunt");
     return null;
   }
@@ -300,7 +302,7 @@ const saveUserIP = async (hunter: string, ip: string) => {
   }
 };
 
-const rsvp = async (hunter: string, info: string) => {
+const rsvp = async (hunter: string, info: string, favoriteArtist: string) => {
   const command = new PutCommand({
     TableName: table,
     Item: {
@@ -308,6 +310,7 @@ const rsvp = async (hunter: string, info: string) => {
 
       sk: `HUNTER#${hunter}`,
       info,
+      favoriteArtist,
     },
   });
   try {

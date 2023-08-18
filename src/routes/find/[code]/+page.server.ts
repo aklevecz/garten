@@ -17,7 +17,7 @@ export const load = (async ({ depends, params, locals }) => {
     throw error(404, "the code does not exist");
   }
   renders++;
-  console.log("find/+page.server.ts:", renders);
+  console.log("find/+page.server.ts:", locals);
   console.log("find/+page.server.ts, hunter: ", locals.hunter);
   return {
     code,
@@ -25,6 +25,7 @@ export const load = (async ({ depends, params, locals }) => {
     hunter: locals.hunter,
     info: locals.info,
     isCracker: locals.hunter && locals.hunter === marker.finder,
+    favoriteArtist: locals.favoriteArtist,
     // markers: db.getMarkers(db.getActiveHunt().name as Hunts),
   };
 }) satisfies PageServerLoad;

@@ -27,9 +27,13 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
   // no hunter means no user session
   if (!hunter) {
     hunter = name as string;
-    const info = await db.getHunterInfo(hunter);
-    console.log(info);
-    const sealed = await Iron.seal({ hunter, info }, SESSION_SECRET, Iron.defaults);
+    // mimicing login, but what if they don't exist already from rsvping idiot
+    const hunterObject = await db.getHunterInfo(hunter);
+    const sealed = await Iron.seal(
+      { hunter, info: hunterObject?.info, favoriteArtist: hunterObject?.favoriteArtist },
+      SESSION_SECRET,
+      Iron.defaults
+    );
     cookies.set(cookieKeys.hunter, sealed, { path: "/", httpOnly: true, secure: true });
     // throw error(401, requestErrors.notSignedIn);
   }

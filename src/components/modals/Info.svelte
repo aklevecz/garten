@@ -12,6 +12,7 @@
   }
   let eggDim = "50px";
   let info = $page.data.info;
+  let favoriteArtist = $page.data.favoriteArtist;
   let style = `overflow:visible;width:${eggDim};height:${eggDim};margin-left:-20px;`;
   const inlineEgg = {
     component: Egg,
@@ -28,7 +29,7 @@
   async function onRSVP() {
     let start = performance.now();
     sending = true;
-    await api.rsvp(info);
+    await api.rsvp(info, favoriteArtist);
     invalidate("find");
     let end = performance.now();
     let timeout = 2000 - (end - start);
@@ -46,9 +47,13 @@
   {#if !sending && !sent}
     <p class="line">let's hatch your egg & see what's inside</p>
     <p class="line">leave your info for deets</p>
-    <div>
-      <label for="info">email or number or whatever</label>
-      <input name="info" placeholder="1800-egg@egg.com" bind:value={info} />
+    <div class="input-wrapper">
+      <label for="info">number</label>
+      <input name="info" type="tel" autocomplete="tel" placeholder="3236099839" bind:value={info} />
+    </div>
+    <div class="input-wrapper">
+      <label for="favorite-artist">favorite artist</label>
+      <input name="favorite-artist" type="text" placeholder="your mom" bind:value={favoriteArtist} />
     </div>
     <button on:click={onRSVP}>send it</button>
   {/if}
@@ -72,6 +77,9 @@
   }
   label {
     font-weight: bold;
+  }
+  .input-wrapper {
+    margin-bottom: 10px;
   }
   input {
     width: 100%;

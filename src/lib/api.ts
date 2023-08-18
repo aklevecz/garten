@@ -16,6 +16,6 @@ const fetcher = async (endpoint: Endpoint, method: "POST" | "GET", params: any) 
 
 const claimEgg = async (code: string, name: string) => fetcher("claim", "POST", { code, name });
 
-const rsvp = async (info: string) => fetcher("rsvp", "POST", { info });
+const rsvp = async (info: string, favoriteArtist: string) => fetcher("rsvp", "POST", { info, favoriteArtist });
 
 export default { claimEgg, rsvp };

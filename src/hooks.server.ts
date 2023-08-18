@@ -11,13 +11,14 @@ export const handle = (async ({ event, resolve }) => {
     return resolve(event);
   }
   try {
-    const { hunter, info, email, address } = await Iron.unseal(cookie, SESSION_SECRET, Iron.defaults);
-    console.log("hooks.server.ts, info:", info);
+    const { hunter, info, email, address, favoriteArtist } = await Iron.unseal(cookie, SESSION_SECRET, Iron.defaults);
+    console.log("hooks.server.ts, favoriteArtist:", favoriteArtist);
     console.log("hooks.server.ts, hunter:", hunter, ip);
     event.locals.info = info;
     event.locals.hunter = hunter;
     event.locals.email = email;
     event.locals.address = address;
+    event.locals.favoriteArtist = favoriteArtist;
   } catch (e) {
     console.log("error unseal");
     event.locals.hunter = "";

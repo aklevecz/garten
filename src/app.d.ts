@@ -9,6 +9,7 @@ declare global {
       email: string;
       address: string;
       ip: string;
+      favoriteArtist: string;
     }
     // interface PageData {}
     // interface Platform {}

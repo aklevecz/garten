@@ -27,7 +27,9 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
   // no hunter means no user session
   if (!hunter) {
     hunter = name as string;
-    // mimicing login, but what if they don't exist already from rsvping idiot
+    // see if they already exist to grab their info
+    // there will be some weird overlap if they have multiple claims
+    // need to figure out how to reconcile multiple claims
     const hunterObject = await db.getHunterInfo(hunter);
     const sealed = await Iron.seal(
       { hunter, info: hunterObject?.info, favoriteArtist: hunterObject?.favoriteArtist },
